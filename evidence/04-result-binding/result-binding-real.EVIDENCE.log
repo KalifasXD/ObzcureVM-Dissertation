@@ -1,0 +1,20 @@
+### 0. Build the F4 demo classes + virtualize checkLicense (dev build), capture the seed
+    seed=-1704026219084464702
+
+### 1. VENDOR seals the feature under the REAL checkLicense value (from the ORIGINAL jar, not a re-impl)
+sealed feature with checkLicense(4321)=36659 -> feature.enc (57B)
+
+### 2. LICENSED user, valid serial 4321: the key is derived from the VIRTUALIZED checkLicense
+  checkLicense[virtualized](4321) = 36659
+  serial 4321 -> UNLOCKED: PREMIUM: all features enabled
+
+### 3. PIRATE, serial 9999: checkLicense returns a different value -> the feature stays SEALED
+  checkLicense[virtualized](9999) = 4193
+  serial 9999 -> LOCKED (feature stays sealed; wrong license value)
+
+### 4. Why a cheap patch cannot help (result-binding): there is NO boolean gate in PremiumApp - the
+       feature IS the decrypted payload. To unlock 9999 the attacker must make checkLicense(9999)
+       return checkLicense(4321), i.e. reproduce the output of the virtualized + diversified +
+       AES-GCM-encrypted + off-machine-seeded + fingerprint-node-locked method. Patching the VM blob
+       only corrupts the decode; it never yields the licensed value.
+########## DONE:  result-binding now sits on the REAL virtualized method (F4) ##########

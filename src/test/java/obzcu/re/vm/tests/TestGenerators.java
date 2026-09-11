@@ -57,32 +57,27 @@ public class TestGenerators
             }
             case "VMTypeInsnNode" -> dos.writeUTF((String)inputs[0]); // Object type
             case "VMLdcInsnNode" -> {
-                switch (inputs[0]) {
-                    case String s -> {
-                        dos.writeInt(0);
-                        dos.writeUTF(s);
-                    }
-                    case Integer k -> {
-                        dos.writeInt(1);
-                        dos.writeInt(k);
-                    }
-                    case Long l -> {
-                        dos.writeInt(2);
-                        dos.writeLong(l);
-                    }
-                    case Float f -> {
-                        dos.writeInt(3);
-                        dos.writeFloat(f);
-                    }
-                    case Double d -> {
-                        dos.writeInt(4);
-                        dos.writeDouble(d);
-                    }
-                    case Type t -> {
-                        dos.writeInt(5);
-                        dos.writeUTF(t.getInternalName().replace("/", "."));
-                    }
-                    case null, default -> throw new IllegalStateException("Unexpected cst type: " + inputs[0] + " (" + inputs[0].getClass().getSimpleName() + ")");
+                Object cst = inputs[0];
+                if (cst instanceof String s) {
+                    dos.writeInt(0);
+                    dos.writeUTF(s);
+                } else if (cst instanceof Integer k) {
+                    dos.writeInt(1);
+                    dos.writeInt(k);
+                } else if (cst instanceof Long l) {
+                    dos.writeInt(2);
+                    dos.writeLong(l);
+                } else if (cst instanceof Float f) {
+                    dos.writeInt(3);
+                    dos.writeFloat(f);
+                } else if (cst instanceof Double d) {
+                    dos.writeInt(4);
+                    dos.writeDouble(d);
+                } else if (cst instanceof Type t) {
+                    dos.writeInt(5);
+                    dos.writeUTF(t.getInternalName().replace("/", "."));
+                } else {
+                    throw new IllegalStateException("Unexpected cst type: " + inputs[0] + " (" + inputs[0].getClass().getSimpleName() + ")");
                 }
             }
             case "VMVarInsnNode" -> dos.writeInt((int) inputs[0]); // var

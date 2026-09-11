@@ -1,0 +1,24 @@
+############################################################
+# RQ3 virtualization vs ProGuard/Allatori - Thu Sep  3 20:02:19 GTBDT 2026
+java version "18" 2022-03-22
+############################################################
+
+### 1. ProGuard obfuscate (keep LicenseDemo.checkLicense name; obfuscate body)
+    -> license-demo-pg.jar
+
+### 2. Allatori obfuscate (control-flow maximum + string encryption; keep the method name)
+    -> license-demo-allatori.jar (Allatori DEMO)
+
+### 3. Virtualize (static; the seed is irrelevant to a decompilation comparison)
+    -> license-demo-vm-rq3.jar
+
+### 4. Static analysis: does checkLicense still reveal the logic?
+-------------------------------------------------------------------------------------------
+Original (C0)              const7919=YES  arithmetic=YES  vm-dispatch=no    size=3192B
+ProGuard                   const7919=YES  arithmetic=YES  vm-dispatch=no    size=538B
+Allatori                   const7919=no   arithmetic=YES  vm-dispatch=no    size=4305B
+Virtualized (C1)           const7919=no   arithmetic=no   vm-dispatch=YES   size=68516B
+-------------------------------------------------------------------------------------------
+Reading: const7919/arithmetic = the license logic is still in the decompilable bytecode.
+vm-dispatch = the body is only a call into the interpreter (logic lifted into cats.meow).
+### done (RQ3)

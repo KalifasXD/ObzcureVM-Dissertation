@@ -1,0 +1,23 @@
+### 0. Virtualize (dev build) + capture the off-machine seed
+    seed=5771272246684830633
+    sanity, NO debugger (expect PASS): PASS: virtualized checkLicense matches the original on every input.
+
+### 1. The guard is UNVIRTUALIZED PLAINTEXT (javap of the SHIPPED ObzcureVM.class)
+49:  private static void antiDebugCheck();
+95:       0: invokestatic  #141                // Method antiDebugCheck:()V
+    ^ antiDebugCheck() sits in cleartext and is dispatched by a plain invokestatic (not virtualized).
+
+### 2. V5 AS CLAIMED: launch under a debugger -> anti-debug BLOCKS it
+java.lang.IllegalStateException: Debugger or instrumentation agent detected; refusing to run.
+Caused by: java.lang.RuntimeException: Failed loading .meow data.
+
+### 3. ATTACK (Level-2, ~3 bytes, verifier-safe): NOP the antiDebugCheck invokestatic
+NOP'd invokestatic #141 (antiDebugCheck) at file offset 18290
+verifier-safe: removed 1 call site(s); wrote demo/anti-debug-patch/work/obzcu/re/virtualmachine/ObzcureVM.class
+    patched ObzcureVM.class re-inserted into license-demo-vm.jar
+
+### 4. V5 FALSIFIED: the SAME debugger launch now RUNS (guard gone; JDWP still listening on 5005)
+Mismatches: 0
+PASS: virtualized checkLicense matches the original on every input.
+
+########## DONE:  BLOCKED before the patch  ->  the exact same launch PASSES after a 3-byte NOP ##########

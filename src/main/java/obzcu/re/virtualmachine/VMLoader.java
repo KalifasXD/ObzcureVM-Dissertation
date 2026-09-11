@@ -4,6 +4,7 @@ import obzcu.re.virtualmachine.asm.VMOpcodes;
 import obzcu.re.virtualmachine.types.*;
 
 import java.io.DataInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,13 +19,19 @@ public class VMLoader
 
     private static final boolean debug = false;
 
-    public static VMNode[] load(ObzcureVM vm, DataInputStream dis) throws Throwable
+    public static VMNode[] load(ObzcureVM vm, DataInputStream dis, long seed) throws Throwable
     {
         if (!dis.readUTF().equals("Meow")) // Meow!
             throw new RuntimeException("Invalid meow file! Meow meow!");
         vm.setClassName(dis.readUTF()); // className
         vm.setMethodName(dis.readUTF()); // methodName
         vm.setMethodDesc(dis.readUTF()); // methodDesc
+
+        // Per-build diversification: the seed is delivered off-machine (passed in as a parameter,
+        // NOT read from the blob). Rebuild the same permutation from it and invert it to decode.
+        int[] perm = buildPermutation(seed);
+        int[] inverse = invert(perm);
+
         List<VMNode> nodes = new ArrayList<>();
         boolean done = false;
         int curr = 0;
@@ -39,7 +46,7 @@ public class VMLoader
             switch (className)
             {
                 case "VMLabelInsnNode": {
-                    VMLabelInsnNode node = new VMLabelInsnNode(dis.readInt());
+                    VMLabelInsnNode node = new VMLabelInsnNode(readOpcode(dis, inverse));
                     if (debug) System.err.println("\033[91mopcode: " + node.opcode);
                     int index = dis.readInt();
                     if (debug) System.err.println("\033[91mindex: " + index);
@@ -47,7 +54,7 @@ public class VMLoader
                     nodes.add(node);
                 } break;
                 case "VMLineNumberInsnNode": {
-                    VMLineNumberInsnNode node = new VMLineNumberInsnNode(dis.readInt());
+                    VMLineNumberInsnNode node = new VMLineNumberInsnNode(readOpcode(dis, inverse));
                     if (debug) System.err.println("\033[91mopcode: " + node.opcode);
                     int lineNumber = dis.readInt();
                     if (debug) System.err.println("\033[91mlineNumber: " + lineNumber);
@@ -55,7 +62,7 @@ public class VMLoader
                     nodes.add(node);
                 } break;
                 case "VMJumpInsnNode": {
-                    VMJumpInsnNode node = new VMJumpInsnNode(dis.readInt());
+                    VMJumpInsnNode node = new VMJumpInsnNode(readOpcode(dis, inverse));
                     if (debug) System.err.println("\033[91mopcode: " + node.opcode);
                     int index = dis.readInt();
                     if (debug) System.err.println("\033[91mindex: " + index);
@@ -63,7 +70,7 @@ public class VMLoader
                     nodes.add(node);
                 } break;
                 case "VMIntInsnNode": {
-                    VMIntInsnNode node = new VMIntInsnNode(dis.readInt());
+                    VMIntInsnNode node = new VMIntInsnNode(readOpcode(dis, inverse));
                     if (debug) System.err.println("\033[91mopcode: " + node.opcode);
                     int operand = dis.readInt();
                     if (debug) System.err.println("\033[91moperand: " + operand);
@@ -71,13 +78,13 @@ public class VMLoader
                     nodes.add(node);
                 } break;
                 case "VMInsnNode": {
-                    VMInsnNode node = new VMInsnNode(dis.readInt());
+                    VMInsnNode node = new VMInsnNode(readOpcode(dis, inverse));
                     if (debug) System.err.println("\033[91mopcode: " + node.opcode);
                     // No inputs, we use the opcode
                     nodes.add(node);
                 } break;
                 case "VMFieldInsnNode": {
-                    VMFieldInsnNode node = new VMFieldInsnNode(dis.readInt());
+                    VMFieldInsnNode node = new VMFieldInsnNode(readOpcode(dis, inverse));
                     if (debug) System.err.println("\033[91mopcode: " + node.opcode);
                     setInput(vm, node,
                         dis.readUTF(), // owner
@@ -89,7 +96,7 @@ public class VMLoader
                     nodes.add(node);
                 } break;
                 case "VMMethodInsnNode": {
-                    VMMethodInsnNode node = new VMMethodInsnNode(dis.readInt());
+                    VMMethodInsnNode node = new VMMethodInsnNode(readOpcode(dis, inverse));
                     if (debug) System.err.println("\033[91mopcode: " + node.opcode);
                     List<Object> inputs = new ArrayList<>();
                     inputs.add(dis.readUTF()); // owner
@@ -105,7 +112,7 @@ public class VMLoader
                     nodes.add(node);
                 } break;
                 case "VMTypeInsnNode": {
-                    VMTypeInsnNode node = new VMTypeInsnNode(dis.readInt());
+                    VMTypeInsnNode node = new VMTypeInsnNode(readOpcode(dis, inverse));
                     if (debug) System.err.println("\033[91mopcode: " + node.opcode);
                     String desc = dis.readUTF();
                     setInput(vm, node, desc);
@@ -113,7 +120,7 @@ public class VMLoader
                     nodes.add(node);
                 } break;
                 case "VMLdcInsnNode": {
-                    VMLdcInsnNode node = new VMLdcInsnNode(dis.readInt());
+                    VMLdcInsnNode node = new VMLdcInsnNode(readOpcode(dis, inverse));
                     if (debug) System.err.println("\033[91mopcode: " + node.opcode);
                     int type = dis.readInt();
                     if (debug) System.err.println("\033[91mtype: " + type);
@@ -134,7 +141,7 @@ public class VMLoader
                     nodes.add(node);
                 } break;
                 case "VMVarInsnNode": {
-                    VMVarInsnNode node = new VMVarInsnNode(dis.readInt());
+                    VMVarInsnNode node = new VMVarInsnNode(readOpcode(dis, inverse));
                     if (debug) System.err.println("\033[91mopcode: " + node.opcode);
                     int var = dis.readInt();
                     if (debug) System.err.println("\033[91mvar: " + var);
@@ -142,7 +149,7 @@ public class VMLoader
                     nodes.add(node);
                 } break;
                 case "VMIincInsnNode": {
-                    VMIincInsnNode node = new VMIincInsnNode(dis.readInt());
+                    VMIincInsnNode node = new VMIincInsnNode(readOpcode(dis, inverse));
                     if (debug) System.err.println("\033[91mopcode: " + node.opcode);
                     int var = dis.readInt();
                     int incr = dis.readInt();
@@ -155,7 +162,7 @@ public class VMLoader
                     boolean unsupported = false;
                     if (unsupported)
                         continue;
-                    VMInvokeDynamicInsnNode node = new VMInvokeDynamicInsnNode(dis.readInt());
+                    VMInvokeDynamicInsnNode node = new VMInvokeDynamicInsnNode(readOpcode(dis, inverse));
                     if (debug) System.err.println("\033[91mopcode: " + node.opcode);
                     List<Object> inputs = new ArrayList<>();
                     if (!readInvokeDynamics(dis, inputs))
@@ -164,7 +171,7 @@ public class VMLoader
                     nodes.add(node);
                 } break;
                 case "VMLookupSwitchInsnNode": {
-                    VMLookupSwitchInsnNode node = new VMLookupSwitchInsnNode(dis.readInt());
+                    VMLookupSwitchInsnNode node = new VMLookupSwitchInsnNode(readOpcode(dis, inverse));
                     int defaultIndex = dis.readInt();
                     int count = dis.readInt();
                     int[] keys = new int[count];
@@ -178,7 +185,7 @@ public class VMLoader
                     nodes.add(node);
                 } break;
                 case "VMTableSwitchInsnNode": {
-                    VMTableSwitchInsnNode node = new VMTableSwitchInsnNode(dis.readInt());
+                    VMTableSwitchInsnNode node = new VMTableSwitchInsnNode(readOpcode(dis, inverse));
                     int min = dis.readInt();
                     int max = dis.readInt();
                     int defaultIndex = dis.readInt();
@@ -256,4 +263,28 @@ public class VMLoader
         vmNode.input = obj;
     }
 
+    private static int readOpcode(DataInputStream dis, int[] inverse) throws IOException {
+        int v = dis.readInt();
+        // Undo the shuffle for real opcodes; pass through pseudo-opcodes (-1).
+        return v < 0 ? v : inverse[v];
+    }
+
+    // Rebuild the same permutation the Translator used (same seed -> same shuffle).
+    private static int[] buildPermutation(long seed) {
+        int[] p = new int[256];
+        for (int i = 0; i < 256; i++) p[i] = i;
+        java.util.Random r = new java.util.Random(seed);
+        for (int i = 255; i > 0; i--) {
+            int j = r.nextInt(i + 1);
+            int t = p[i]; p[i] = p[j]; p[j] = t;
+        }
+        return p;
+    }
+
+    // Flip a permutation into its inverse: if perm maps a->b, inverse maps b->a.
+    private static int[] invert(int[] perm) {
+        int[] inv = new int[perm.length];
+        for (int i = 0; i < perm.length; i++) inv[perm[i]] = i;
+        return inv;
+    }
 }

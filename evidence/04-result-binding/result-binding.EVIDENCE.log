@@ -1,0 +1,22 @@
+### compile (JDK-only) ###
+compiled OK
+
+########## A) BOOLEAN GATE = single point of failure ##########
+  normal  valid  4321: serial 4321 -> UNLOCKED (all features)
+  normal  pirate 9999: serial 9999 -> LOCKED (buy a license)
+  attacker flips ONE byte in isLicensed:  if_icmpne(a0) -> if_icmpeq(9f)
+patched GateDemo.class @offset 958: 1a1110e1a0 -> 1a1110e19f
+  PATCHED pirate 9999: serial 9999 -> UNLOCKED (all features)
+  => GATE DEFEATED by a 1-byte edit; attacker never touched the license logic.
+
+########## B) RESULT-BINDING = the feature IS the value ##########
+sealed feature with licenseValue(4321)=136659 -> feature.enc (57B)
+  normal  valid  4321: serial 4321 -> UNLOCKED: PREMIUM: all features enabled
+  normal  pirate 9999: serial 9999 -> LOCKED (invalid license)
+  attacker tries the SAME cheap trick: 1-byte patch of the computation 7919(111eef)->7918(111eee)
+patched Vault.class @offset 1525: 111eef -> 111eee
+  PATCHED legit  4321: serial 4321 -> LOCKED (invalid license)
+  PATCHED pirate 9999: serial 9999 -> LOCKED (invalid license)
+  => RESULT-BOUND: a 1-byte patch only BREAKS it (LOCKED), never unlocks. To unlock an invalid
+     serial the attacker must reproduce licenseValue==136659 = defeat the real computation.
+########## DONE ##########

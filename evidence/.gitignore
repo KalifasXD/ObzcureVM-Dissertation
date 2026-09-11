@@ -1,0 +1,5 @@
+# OS / editor cruft only. The .log and data files ARE the evidence - never ignore them.
+Thumbs.db
+.DS_Store
+desktop.ini
+*.swp

@@ -1,5 +1,6 @@
 package obzcu.re.vm.translator;
 
+import obzcu.re.virtualmachine.BlobCrypto;
 import obzcu.re.virtualmachine.ObzcureVM;
 import obzcu.re.virtualmachine.VMLoader;
 import obzcu.re.virtualmachine.asm.VMTryCatch;
@@ -16,10 +17,7 @@ import org.objectweb.asm.util.Printer;
 import org.objectweb.asm.util.Textifier;
 import org.objectweb.asm.util.TraceMethodVisitor;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.lang.invoke.MethodHandles;
 import java.util.*;
 
@@ -51,6 +49,7 @@ public class Translator implements Opcodes
     private final DataOutputStream writer = new DataOutputStream(baos);
 
     private byte[] result = null;
+    private long usedSeed; // the per-build seed actually used to diversify; reused to encrypt the blob at rest
     private TranslateInvokeDynamics translateInvokeDynamics = null;
     private final List<AbstractInsnNode> constructorInsnList = new ArrayList<>();
 
@@ -162,6 +161,15 @@ public class Translator implements Opcodes
         writer.writeUTF(methodName);
         writer.writeUTF(methodDesc);
 
+        // Per-build diversification: use the ONE seed generated for this build (shared by all
+        // methods) and derive the opcode permutation from it. The seed is DELIBERATELY NOT written
+        // into the blob: it is delivered off-machine by the license server at runtime, so a dumped
+        // blob alone cannot be decoded (Kerckhoffs: public interpreter, secret per-build seed).
+        // (Fall back to a fresh random seed only when there is no Obzcure context, e.g. unit tests.)
+        long seed = (obzcure != null) ? obzcure.buildSeed : new java.security.SecureRandom().nextLong();
+        this.usedSeed = seed;
+        this.perm = buildPermutation(seed);
+
         boolean hasReachedSupercall = !translateConstructor;
         for (AbstractInsnNode insn : insnList.toArray())
         {
@@ -197,7 +205,7 @@ public class Translator implements Opcodes
             if (insn instanceof LabelNode) {
                 if (debug) System.out.println("VMLabelInsnNode: " + opcode);
                 writer.writeUTF("VMLabelInsnNode");
-                writer.writeInt(opcode);
+                writeOpcode(opcode);
 
                 writer.writeInt(index);
                 if (debug) System.out.println("index: " + index);
@@ -206,7 +214,7 @@ public class Translator implements Opcodes
 
                 if (debug) System.out.println("VMLineNumberInsnNode: " + opcode);
                 writer.writeUTF("VMLineNumberInsnNode");
-                writer.writeInt(opcode);
+                writeOpcode(opcode);
 
                 writer.writeInt(lineNumberNode.line);
                 if (debug) System.out.println("lineNumberNode.line: " + lineNumberNode.line);
@@ -215,7 +223,7 @@ public class Translator implements Opcodes
 
                 if (debug) System.out.println("VMJumpInsnNode: " + opcode);
                 writer.writeUTF("VMJumpInsnNode");
-                writer.writeInt(opcode);
+                writeOpcode(opcode);
 
                 writer.writeInt(insnList.indexOf(jumpInsnNode.label));
                 if (debug)
@@ -225,7 +233,7 @@ public class Translator implements Opcodes
 
                 if (debug) System.out.println(": " + opcode);
                 writer.writeUTF("VMIntInsnNode");
-                writer.writeInt(opcode);
+                writeOpcode(opcode);
 
                 writer.writeInt(intInsnNode.operand);
                 if (debug) System.out.println("intInsnNode.operand: " + intInsnNode.operand);
@@ -234,7 +242,7 @@ public class Translator implements Opcodes
 
                 if (debug) System.out.println("VMInsnNode: " + opcode);
                 writer.writeUTF("VMInsnNode");
-                writer.writeInt(opcode);
+                writeOpcode(opcode);
 
                 // Nothing required, we use the opcode
             } else if (insn instanceof FieldInsnNode) {
@@ -242,7 +250,7 @@ public class Translator implements Opcodes
 
                 if (debug) System.out.println("VMFieldInsnNode: " + opcode);
                 writer.writeUTF("VMFieldInsnNode");
-                writer.writeInt(opcode);
+                writeOpcode(opcode);
 
                 if (debug) System.out.println("fieldInsnNode.owner: " + fieldInsnNode.owner.replace("/", "."));
                 writer.writeUTF(fieldInsnNode.owner.replace("/", "."));
@@ -278,7 +286,7 @@ public class Translator implements Opcodes
                 }
 
                 writer.writeUTF("VMMethodInsnNode");
-                writer.writeInt(opcode);
+                writeOpcode(opcode);
 
                 if (debug) System.out.println("methodInsnNode.owner: " + methodInsnNode.owner.replace("/", "."));
                 writer.writeUTF(methodInsnNode.owner.replace("/", "."));
@@ -311,7 +319,7 @@ public class Translator implements Opcodes
 
                 if (debug) System.out.println("VMTypeInsnNode: " + opcode);
                 writer.writeUTF("VMTypeInsnNode");
-                writer.writeInt(opcode);
+                writeOpcode(opcode);
 
                 if (debug)
                     System.out.println("typeInsnNode.desc: " + Type.getObjectType(typeInsnNode.desc).getInternalName().replace("/", "."));
@@ -321,7 +329,7 @@ public class Translator implements Opcodes
 
                 if (debug) System.out.println("VMLdcInsnNode: " + opcode);
                 writer.writeUTF("VMLdcInsnNode");
-                writer.writeInt(opcode);
+                writeOpcode(opcode);
 
                 Object cst = ldcInsnNode.cst;
                 if (cst instanceof String) {
@@ -351,7 +359,7 @@ public class Translator implements Opcodes
 
                 if (debug) System.out.println("VMVarInsnNode: " + opcode);
                 writer.writeUTF("VMVarInsnNode");
-                writer.writeInt(opcode);
+                writeOpcode(opcode);
 
                 if (debug) System.out.println("varInsnNode.var: " + varInsnNode.var);
                 writer.writeInt(varInsnNode.var);
@@ -360,7 +368,7 @@ public class Translator implements Opcodes
 
                 if (debug) System.out.println("VMIincInsnNode: " + opcode);
                 writer.writeUTF("VMIincInsnNode");
-                writer.writeInt(opcode);
+                writeOpcode(opcode);
 
                 if (debug) System.out.println("iincInsnNode.var: " + iincInsnNode.var);
                 writer.writeInt(iincInsnNode.var);
@@ -389,7 +397,7 @@ public class Translator implements Opcodes
 
                 if (debug) System.out.println("VMLookupSwitchInsnNode: " + opcode);
                 writer.writeUTF("VMLookupSwitchInsnNode");
-                writer.writeInt(opcode);
+                writeOpcode(opcode);
 
                 int defaultIndex = insnList.indexOf(lookup.dflt);
                 writer.writeInt(defaultIndex);
@@ -414,7 +422,7 @@ public class Translator implements Opcodes
 
                 if (debug) System.out.println("VMTableSwitchInsnNode: " + opcode);
                 writer.writeUTF("VMTableSwitchInsnNode");
-                writer.writeInt(opcode);
+                writeOpcode(opcode);
 
                 writer.writeInt(table.min); // min
                 writer.writeInt(table.max); // max
@@ -757,7 +765,11 @@ public class Translator implements Opcodes
             t.printStackTrace();
             return false;
         }
-        result = baos.toByteArray();
+        // Anti-dump: encrypt the finished per-method blob at rest with the SAME off-machine seed
+        // that seeded the opcode permutation (key = SHA-256(seed)). A static dump of cats.meow now
+        // yields only [IV][ciphertext+tag] instead of leaking operands (e.g. the secret constant)
+        // and class/method metadata in plaintext.
+        result = BlobCrypto.encrypt(baos.toByteArray(), this.usedSeed);
         return true;
     }
 
@@ -801,4 +813,26 @@ public class Translator implements Opcodes
         return OPCODE_NAMES[index];
     }
 
+
+    private int[] perm; // per-build opcode permutation (set in translateInstructions)
+
+    private void writeOpcode(int op) throws IOException {
+        // Diversification: write the SHUFFLED number for real opcodes (0..255).
+        // Pseudo-opcodes like -1 (labels, line numbers) pass through unchanged.
+        writer.writeInt(op < 0 ? op : perm[op]);
+    }
+
+    // Build a random permutation of 0..255 from a seed (Fisher-Yates shuffle).
+    // The same seed always yields the same permutation, so the interpreter
+    // (VMLoader) can rebuild it and invert it to decode.
+    private static int[] buildPermutation(long seed) {
+        int[] p = new int[256];
+        for (int i = 0; i < 256; i++) p[i] = i;
+        java.util.Random r = new java.util.Random(seed);
+        for (int i = 255; i > 0; i--) {
+            int j = r.nextInt(i + 1);
+            int t = p[i]; p[i] = p[j]; p[j] = t;
+        }
+        return p;
+    }
 }

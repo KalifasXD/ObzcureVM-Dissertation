@@ -1,0 +1,51 @@
+############################################################
+# JabRef injection milestone - Wed Sep  2 07:12:56 AM UTC 2026
+openjdk version "17.0.19" 2026-04-21
+############################################################
+
+### 0. Compile the guard components
+    compiled: GuardSealer.class Injector.class LicenseEnforcer.class LicenseGuard$ApplyObzcureVM.class LicenseGuard.class Repack.class 
+
+### 1. INJECT (source-agnostic ASM) into jabref/JabRef-4.3.1.jar
+  inserted invokestatic LicenseEnforcer.enforce()V at org/jabref/JabRefMain.main offset 0
+copied 41725 entries, replaced org/jabref/JabRefMain.class, added 3 classes -> demo/jabref-inject/jabref-injected.jar
+
+### 2. SEAL a marker payload under checkLicense(VALID) from the ORIGINAL guard
+sealed "JABREF-PREMIUM-ENABLED" under checkLicense(4321)=1492878012857698063 -> demo/jabref-inject/guard.enc (50 bytes)
+
+### 3. VIRTUALIZE the guard (per-build seed printed by the tool)
+    per-build seed = -5290134626092024378
+
+### 4. REPACK -> jabref-protected.jar
+copied 41728 entries (replaced 1 = virtualized LicenseGuard), added 32 VM-runtime/cats.meow entries + guard.enc -> demo/jabref-inject/jabref-protected.jar
+
+### 5. STRUCTURAL verify (injection point + virtualized guard + manifest)
+-- JabRefMain.main (enforce() must be at offset 0):
+  public static void main(java.lang.String[]);
+    Code:
+       0: invokestatic  #32                 // Method LicenseEnforcer.enforce:()V
+       3: aload_0
+-- Main-Class preserved:
+Main-Class: org.jabref.JabRefMain
+-- LicenseGuard.checkLicense inside the protected jar (must be a VM dispatch shell):
+  public static long checkLicense(int);
+       6: invokestatic  #24                 // Method obzcu/re/virtualmachine/ObzcureVM.virtualize:(IIILjava/lang/invoke/MethodHandles$Lookup;)Lobzcu/re/virtualmachine/ObzcureVM;
+      20: invokevirtual #38                 // Method obzcu/re/virtualmachine/ObzcureVM.execute:()Ljava/lang/Object;
+
+### 6. PROTECTION verify (server-first + TLS + node-lock + result-binding)
+-- vendor registers the per-build seed for JABREF-001:
+registered license=JABREF-001 [HTTP 200]
+-- (a) VALID serial 4321  -> expect UNLOCKED:
+[harness] checkLicense[virtualized](4321) = 1492878012857698063
+[license] verified: JABREF-PREMIUM-ENABLED
+[harness] enforce() returned normally -> the application would proceed
+-- (b) PIRATE serial 9999 -> expect LOCKED (guard runs, wrong value):
+[harness] checkLicense[virtualized](9999) = -5744848698765824678
+[license] verification failed; refusing to run
+-- (c) NO LICENSE         -> expect LOCKED (no seed, guard inert):
+[harness] the virtualized guard did not run: java.lang.RuntimeException: Failed loading .meow data.
+[license] verification failed; refusing to run
+
+############################################################
+# DONE: protection demonstrated on the real application jar.
+############################################################

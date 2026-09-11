@@ -1,0 +1,1455 @@
+# ---------------------------------------------------------------------------
+# NOTE (sanitized public copy). For privacy, absolute sandbox paths have been
+# shortened to <sandbox>/ and incidental owner usernames in directory listings
+# replaced with "user". No command, output, disassembly, verdict, brute-force
+# count, or any other result has been altered. The unmodified raw log is
+# retained by the author and available on request.
+# ---------------------------------------------------------------------------
+
+== $ date
+Wed Sep  9 21:23:51 GTBDT 2026
+== $ ls -la
+total 86
+drwxr-xr-x 1 user 197121     0 Sep  9 21:23 .
+drwxr-xr-x 1 user 197121     0 Sep  9 21:22 ..
+-rw-r--r-- 1 user 197121    53 Sep  9 21:23 EVIDENCE.log
+-rw-r--r-- 1 user 197121  3496 Sep  9 21:22 Feature.class
+-rw-r--r-- 1 user 197121  1814 Sep  9 21:22 PremiumApp.class
+-rw-r--r-- 1 user 197121    57 Sep  9 21:22 feature.enc
+-rw-r--r-- 1 user 197121 68552 Sep  9 21:22 license-demo-vm.jar
+== $ unzip -l license-demo-vm.jar
+Archive:  license-demo-vm.jar
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+      201  2026-08-27 07:54   LicenseDemo$ApplyObzcureVM.class
+     1071  2026-08-27 07:54   obzcu/re/virtualmachine/types/invokedynamics/VMFunction.class
+     2855  2026-08-27 07:54   DiffTest.class
+     1019  2026-08-27 07:54   obzcu/re/virtualmachine/ObzcureVM$Quad.class
+     1541  2026-08-27 07:54   LicenseDemo.class
+     2044  2026-08-27 07:54   obzcu/re/virtualmachine/types/VMNode.class
+     4870  2026-08-27 07:54   obzcu/re/virtualmachine/BlobCrypto.class
+     1005  2026-08-27 07:54   obzcu/re/virtualmachine/types/invokedynamics/VMConsumer.class
+     2522  2026-08-27 07:54   obzcu/re/virtualmachine/types/VMIntInsnNode.class
+     1102  2026-08-27 07:54   obzcu/re/virtualmachine/types/VMLdcInsnNode.class
+     2631  2026-08-27 07:54   obzcu/re/virtualmachine/types/VMTableSwitchInsnNode.class
+     1164  2026-08-27 07:54   obzcu/re/virtualmachine/types/VMIincInsnNode.class
+    33583  2026-08-27 07:54   obzcu/re/virtualmachine/ObzcureVM.class
+     1166  2026-08-27 07:54   obzcu/re/virtualmachine/types/VMLookupSwitchInsnNode.class
+     5353  2026-08-27 07:54   obzcu/re/virtualmachine/asm/VMOpcodes.class
+      961  2026-08-27 07:54   obzcu/re/virtualmachine/types/invokedynamics/VMSupplier.class
+      695  2026-08-27 07:54   obzcu/re/virtualmachine/types/VMLabelInsnNode.class
+      909  2026-08-27 07:54   obzcu/re/virtualmachine/ObzcureVM$Trio.class
+     1008  2026-08-27 07:54   obzcu/re/virtualmachine/types/invokedynamics/VMPredicate.class
+     1184  2026-08-27 07:54   obzcu/re/virtualmachine/asm/VMType.class
+    18432  2026-08-27 07:54   obzcu/re/virtualmachine/types/VMInvokeDynamicInsnNode.class
+     4046  2026-08-27 07:54   obzcu/re/virtualmachine/types/VMMethodInsnNode.class
+     2961  2026-08-27 07:54   obzcu/re/virtualmachine/types/VMFieldInsnNode.class
+     1542  2026-08-27 07:54   obzcu/re/virtualmachine/asm/VMTryCatch.class
+     2383  2026-08-27 07:54   obzcu/re/virtualmachine/types/VMJumpInsnNode.class
+    16112  2026-08-27 07:54   obzcu/re/virtualmachine/types/VMInsnNode.class
+      796  2026-08-27 07:54   obzcu/re/virtualmachine/ObzcureVM$Duo.class
+    10248  2026-08-27 07:54   obzcu/re/virtualmachine/VMLoader.class
+     3426  2026-08-27 07:54   obzcu/re/virtualmachine/VMStack.class
+     1444  2026-08-27 07:54   obzcu/re/virtualmachine/asm/VMHandle.class
+      659  2026-08-27 07:54   obzcu/re/virtualmachine/types/invokedynamics/VMRunnable.class
+      816  2026-08-27 07:54   obzcu/re/virtualmachine/types/VMLineNumberInsnNode.class
+     1775  2026-08-27 07:54   obzcu/re/virtualmachine/types/VMVarInsnNode.class
+     2448  2026-08-27 07:54   obzcu/re/virtualmachine/types/VMTypeInsnNode.class
+      647  2026-08-27 07:54   obzcure/cats.meow
+        0  2026-08-27 07:54   META-INF/
+       90  2026-08-27 07:54   META-INF/MANIFEST.MF
+---------                     -------
+   134709                     37 files
+== $ unzip -o license-demo-vm.jar -d jar_x
+Archive:  license-demo-vm.jar
+  inflating: jar_x/LicenseDemo$ApplyObzcureVM.class  
+  inflating: jar_x/obzcu/re/virtualmachine/types/invokedynamics/VMFunction.class  
+  inflating: jar_x/DiffTest.class    
+  inflating: jar_x/obzcu/re/virtualmachine/ObzcureVM$Quad.class  
+  inflating: jar_x/LicenseDemo.class  
+  inflating: jar_x/obzcu/re/virtualmachine/types/VMNode.class  
+  inflating: jar_x/obzcu/re/virtualmachine/BlobCrypto.class  
+  inflating: jar_x/obzcu/re/virtualmachine/types/invokedynamics/VMConsumer.class  
+  inflating: jar_x/obzcu/re/virtualmachine/types/VMIntInsnNode.class  
+  inflating: jar_x/obzcu/re/virtualmachine/types/VMLdcInsnNode.class  
+  inflating: jar_x/obzcu/re/virtualmachine/types/VMTableSwitchInsnNode.class  
+  inflating: jar_x/obzcu/re/virtualmachine/types/VMIincInsnNode.class  
+  inflating: jar_x/obzcu/re/virtualmachine/ObzcureVM.class  
+  inflating: jar_x/obzcu/re/virtualmachine/types/VMLookupSwitchInsnNode.class  
+  inflating: jar_x/obzcu/re/virtualmachine/asm/VMOpcodes.class  
+  inflating: jar_x/obzcu/re/virtualmachine/types/invokedynamics/VMSupplier.class  
+  inflating: jar_x/obzcu/re/virtualmachine/types/VMLabelInsnNode.class  
+  inflating: jar_x/obzcu/re/virtualmachine/ObzcureVM$Trio.class  
+  inflating: jar_x/obzcu/re/virtualmachine/types/invokedynamics/VMPredicate.class  
+  inflating: jar_x/obzcu/re/virtualmachine/asm/VMType.class  
+  inflating: jar_x/obzcu/re/virtualmachine/types/VMInvokeDynamicInsnNode.class  
+  inflating: jar_x/obzcu/re/virtualmachine/types/VMMethodInsnNode.class  
+  inflating: jar_x/obzcu/re/virtualmachine/types/VMFieldInsnNode.class  
+  inflating: jar_x/obzcu/re/virtualmachine/asm/VMTryCatch.class  
+  inflating: jar_x/obzcu/re/virtualmachine/types/VMJumpInsnNode.class  
+  inflating: jar_x/obzcu/re/virtualmachine/types/VMInsnNode.class  
+  inflating: jar_x/obzcu/re/virtualmachine/ObzcureVM$Duo.class  
+  inflating: jar_x/obzcu/re/virtualmachine/VMLoader.class  
+  inflating: jar_x/obzcu/re/virtualmachine/VMStack.class  
+  inflating: jar_x/obzcu/re/virtualmachine/asm/VMHandle.class  
+  inflating: jar_x/obzcu/re/virtualmachine/types/invokedynamics/VMRunnable.class  
+  inflating: jar_x/obzcu/re/virtualmachine/types/VMLineNumberInsnNode.class  
+  inflating: jar_x/obzcu/re/virtualmachine/types/VMVarInsnNode.class  
+  inflating: jar_x/obzcu/re/virtualmachine/types/VMTypeInsnNode.class  
+  inflating: jar_x/obzcure/cats.meow  
+   creating: jar_x/META-INF/
+  inflating: jar_x/META-INF/MANIFEST.MF  
+== $ cat MANIFEST
+Manifest-Version: 1.0
+Created-By: 17.0.19 (Eclipse Adoptium)
+Main-Class: LicenseDemo
+
+== $ javap -c -p -classpath jar_x LicenseDemo
+public class LicenseDemo {
+  public static final java.lang.invoke.MethodHandles$Lookup lookup$obzcure;
+
+  public LicenseDemo();
+    Code:
+       0: aload_0
+       1: invokespecial #18                 // Method java/lang/Object."<init>":()V
+       4: return
+
+  public static void main(java.lang.String[]);
+    Code:
+       0: sipush        4321
+       3: istore_1
+       4: iload_1
+       5: invokestatic  #24                 // Method checkLicense:(I)I
+       8: istore_2
+       9: getstatic     #30                 // Field java/lang/System.out:Ljava/io/PrintStream;
+      12: iload_1
+      13: iload_2
+      14: invokedynamic #42,  0             // InvokeDynamic #0:makeConcatWithConstants:(II)Ljava/lang/String;
+      19: invokevirtual #48                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      22: return
+
+  public static int checkLicense(int);
+    Code:
+       0: iconst_0
+       1: iconst_3
+       2: iconst_3
+       3: getstatic     #51                 // Field lookup$obzcure:Ljava/lang/invoke/MethodHandles$Lookup;
+       6: invokestatic  #57                 // Method obzcu/re/virtualmachine/ObzcureVM.virtualize:(IIILjava/lang/invoke/MethodHandles$Lookup;)Lobzcu/re/virtualmachine/ObzcureVM;
+       9: astore_1
+      10: aload_1
+      11: iconst_0
+      12: iload_0
+      13: invokestatic  #63                 // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+      16: invokevirtual #67                 // Method obzcu/re/virtualmachine/ObzcureVM.setLocal:(ILjava/lang/Object;)V
+      19: aload_1
+      20: invokevirtual #71                 // Method obzcu/re/virtualmachine/ObzcureVM.execute:()Ljava/lang/Object;
+      23: checkcast     #59                 // class java/lang/Integer
+      26: invokevirtual #75                 // Method java/lang/Integer.intValue:()I
+      29: ireturn
+
+  static {};
+    Code:
+       0: invokestatic  #80                 // Method java/lang/invoke/MethodHandles.lookup:()Ljava/lang/invoke/MethodHandles$Lookup;
+       3: putstatic     #51                 // Field lookup$obzcure:Ljava/lang/invoke/MethodHandles$Lookup;
+       6: return
+}
+== $ javap -c -p -classpath jar_x 'LicenseDemo$ApplyObzcureVM'
+public interface LicenseDemo$ApplyObzcureVM extends java.lang.annotation.Annotation {
+}
+== $ javap -c -p PremiumApp
+Compiled from "PremiumApp.java"
+public class PremiumApp {
+  public PremiumApp();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: return
+
+  public static void main(java.lang.String[]) throws java.lang.Exception;
+    Code:
+       0: aload_0
+       1: arraylength
+       2: ifle          14
+       5: aload_0
+       6: iconst_0
+       7: aaload
+       8: invokestatic  #7                  // Method java/lang/Integer.parseInt:(Ljava/lang/String;)I
+      11: goto          17
+      14: sipush        4321
+      17: istore_1
+      18: ldc           #13                 // String license-demo-vm.jar
+      20: iload_1
+      21: invokestatic  #15                 // Method Feature.checkLicense:(Ljava/lang/String;I)I
+      24: istore_2
+      25: getstatic     #21                 // Field java/lang/System.out:Ljava/io/PrintStream;
+      28: iload_1
+      29: iload_2
+      30: invokedynamic #27,  0             // InvokeDynamic #0:makeConcatWithConstants:(II)Ljava/lang/String;
+      35: invokevirtual #31                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      38: ldc           #37                 // String feature.enc
+      40: iconst_0
+      41: anewarray     #39                 // class java/lang/String
+      44: invokestatic  #41                 // InterfaceMethod java/nio/file/Path.of:(Ljava/lang/String;[Ljava/lang/String;)Ljava/nio/file/Path;
+      47: invokestatic  #47                 // Method java/nio/file/Files.readAllBytes:(Ljava/nio/file/Path;)[B
+      50: astore_3
+      51: invokestatic  #53                 // Method Feature.seed:()J
+      54: lstore        4
+      56: aload_3
+      57: iload_2
+      58: lload         4
+      60: invokestatic  #57                 // Method Feature.decrypt:([BIJ)[B
+      63: astore        6
+      65: getstatic     #21                 // Field java/lang/System.out:Ljava/io/PrintStream;
+      68: iload_1
+      69: new           #39                 // class java/lang/String
+      72: dup
+      73: aload         6
+      75: ldc           #61                 // String UTF-8
+      77: invokespecial #63                 // Method java/lang/String."<init>":([BLjava/lang/String;)V
+      80: invokedynamic #66,  0             // InvokeDynamic #1:makeConcatWithConstants:(ILjava/lang/String;)Ljava/lang/String;
+      85: invokevirtual #31                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      88: goto          105
+      91: astore        6
+      93: getstatic     #21                 // Field java/lang/System.out:Ljava/io/PrintStream;
+      96: iload_1
+      97: invokedynamic #71,  0             // InvokeDynamic #2:makeConcatWithConstants:(I)Ljava/lang/String;
+     102: invokevirtual #31                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+     105: return
+    Exception table:
+       from    to  target type
+          56    88    91   Class java/lang/Exception
+}
+== $ javap -c -p Feature
+Compiled from "Feature.java"
+public class Feature {
+  public Feature();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: return
+
+  static long seed();
+    Code:
+       0: ldc           #7                  // String obzcure.seed
+       2: invokestatic  #9                  // Method java/lang/System.getProperty:(Ljava/lang/String;)Ljava/lang/String;
+       5: astore_0
+       6: aload_0
+       7: ifnull        17
+      10: aload_0
+      11: invokevirtual #15                 // Method java/lang/String.isEmpty:()Z
+      14: ifeq          27
+      17: new           #21                 // class java/lang/IllegalStateException
+      20: dup
+      21: ldc           #23                 // String no off-machine seed available
+      23: invokespecial #25                 // Method java/lang/IllegalStateException."<init>":(Ljava/lang/String;)V
+      26: athrow
+      27: aload_0
+      28: invokevirtual #28                 // Method java/lang/String.trim:()Ljava/lang/String;
+      31: invokestatic  #32                 // Method java/lang/Long.parseLong:(Ljava/lang/String;)J
+      34: lreturn
+
+  static javax.crypto.spec.SecretKeySpec key(int, long) throws java.lang.Exception;
+    Code:
+       0: ldc           #38                 // String SHA-256
+       2: invokestatic  #40                 // Method java/security/MessageDigest.getInstance:(Ljava/lang/String;)Ljava/security/MessageDigest;
+       5: astore_3
+       6: aload_3
+       7: bipush        8
+       9: invokestatic  #46                 // Method java/nio/ByteBuffer.allocate:(I)Ljava/nio/ByteBuffer;
+      12: lload_1
+      13: invokevirtual #52                 // Method java/nio/ByteBuffer.putLong:(J)Ljava/nio/ByteBuffer;
+      16: invokevirtual #56                 // Method java/nio/ByteBuffer.array:()[B
+      19: invokevirtual #60                 // Method java/security/MessageDigest.update:([B)V
+      22: aload_3
+      23: iload_0
+      24: invokedynamic #64,  0             // InvokeDynamic #0:makeConcatWithConstants:(I)Ljava/lang/String;
+      29: ldc           #68                 // String UTF-8
+      31: invokevirtual #70                 // Method java/lang/String.getBytes:(Ljava/lang/String;)[B
+      34: invokevirtual #60                 // Method java/security/MessageDigest.update:([B)V
+      37: new           #74                 // class javax/crypto/spec/SecretKeySpec
+      40: dup
+      41: aload_3
+      42: invokevirtual #76                 // Method java/security/MessageDigest.digest:()[B
+      45: ldc           #79                 // String AES
+      47: invokespecial #81                 // Method javax/crypto/spec/SecretKeySpec."<init>":([BLjava/lang/String;)V
+      50: areturn
+
+  static byte[] encrypt(byte[], int, long) throws java.lang.Exception;
+    Code:
+       0: bipush        12
+       2: newarray       byte
+       4: astore        4
+       6: new           #84                 // class java/security/SecureRandom
+       9: dup
+      10: invokespecial #86                 // Method java/security/SecureRandom."<init>":()V
+      13: aload         4
+      15: invokevirtual #87                 // Method java/security/SecureRandom.nextBytes:([B)V
+      18: ldc           #90                 // String AES/GCM/NoPadding
+      20: invokestatic  #92                 // Method javax/crypto/Cipher.getInstance:(Ljava/lang/String;)Ljavax/crypto/Cipher;
+      23: astore        5
+      25: aload         5
+      27: iconst_1
+      28: iload_1
+      29: lload_2
+      30: invokestatic  #97                 // Method key:(IJ)Ljavax/crypto/spec/SecretKeySpec;
+      33: new           #103                // class javax/crypto/spec/GCMParameterSpec
+      36: dup
+      37: sipush        128
+      40: aload         4
+      42: invokespecial #105                // Method javax/crypto/spec/GCMParameterSpec."<init>":(I[B)V
+      45: invokevirtual #108                // Method javax/crypto/Cipher.init:(ILjava/security/Key;Ljava/security/spec/AlgorithmParameterSpec;)V
+      48: aload         5
+      50: aload_0
+      51: invokevirtual #112                // Method javax/crypto/Cipher.doFinal:([B)[B
+      54: astore        6
+      56: bipush        12
+      58: aload         6
+      60: arraylength
+      61: iadd
+      62: newarray       byte
+      64: astore        7
+      66: aload         4
+      68: iconst_0
+      69: aload         7
+      71: iconst_0
+      72: bipush        12
+      74: invokestatic  #116                // Method java/lang/System.arraycopy:(Ljava/lang/Object;ILjava/lang/Object;II)V
+      77: aload         6
+      79: iconst_0
+      80: aload         7
+      82: bipush        12
+      84: aload         6
+      86: arraylength
+      87: invokestatic  #116                // Method java/lang/System.arraycopy:(Ljava/lang/Object;ILjava/lang/Object;II)V
+      90: aload         7
+      92: areturn
+
+  static byte[] decrypt(byte[], int, long) throws java.lang.Exception;
+    Code:
+       0: ldc           #90                 // String AES/GCM/NoPadding
+       2: invokestatic  #92                 // Method javax/crypto/Cipher.getInstance:(Ljava/lang/String;)Ljavax/crypto/Cipher;
+       5: astore        4
+       7: aload         4
+       9: iconst_2
+      10: iload_1
+      11: lload_2
+      12: invokestatic  #97                 // Method key:(IJ)Ljavax/crypto/spec/SecretKeySpec;
+      15: new           #103                // class javax/crypto/spec/GCMParameterSpec
+      18: dup
+      19: sipush        128
+      22: aload_0
+      23: iconst_0
+      24: bipush        12
+      26: invokespecial #120                // Method javax/crypto/spec/GCMParameterSpec."<init>":(I[BII)V
+      29: invokevirtual #108                // Method javax/crypto/Cipher.init:(ILjava/security/Key;Ljava/security/spec/AlgorithmParameterSpec;)V
+      32: aload         4
+      34: aload_0
+      35: bipush        12
+      37: aload_0
+      38: arraylength
+      39: bipush        12
+      41: isub
+      42: invokevirtual #123                // Method javax/crypto/Cipher.doFinal:([BII)[B
+      45: areturn
+
+  static int checkLicense(java.lang.String, int) throws java.lang.Exception;
+    Code:
+       0: new           #126                // class java/net/URLClassLoader
+       3: dup
+       4: iconst_1
+       5: anewarray     #128                // class java/net/URL
+       8: dup
+       9: iconst_0
+      10: new           #130                // class java/io/File
+      13: dup
+      14: aload_0
+      15: invokespecial #132                // Method java/io/File."<init>":(Ljava/lang/String;)V
+      18: invokevirtual #133                // Method java/io/File.toURI:()Ljava/net/URI;
+      21: invokevirtual #137                // Method java/net/URI.toURL:()Ljava/net/URL;
+      24: aastore
+      25: invokestatic  #143                // Method java/lang/ClassLoader.getPlatformClassLoader:()Ljava/lang/ClassLoader;
+      28: invokespecial #149                // Method java/net/URLClassLoader."<init>":([Ljava/net/URL;Ljava/lang/ClassLoader;)V
+      31: astore_2
+      32: ldc           #152                // String LicenseDemo
+      34: iconst_1
+      35: aload_2
+      36: invokestatic  #154                // Method java/lang/Class.forName:(Ljava/lang/String;ZLjava/lang/ClassLoader;)Ljava/lang/Class;
+      39: ldc           #160                // String checkLicense
+      41: iconst_1
+      42: anewarray     #155                // class java/lang/Class
+      45: dup
+      46: iconst_0
+      47: getstatic     #162                // Field java/lang/Integer.TYPE:Ljava/lang/Class;
+      50: aastore
+      51: invokevirtual #168                // Method java/lang/Class.getDeclaredMethod:(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+      54: astore_3
+      55: aload_3
+      56: iconst_1
+      57: invokevirtual #172                // Method java/lang/reflect/Method.setAccessible:(Z)V
+      60: aload_3
+      61: aconst_null
+      62: iconst_1
+      63: anewarray     #2                  // class java/lang/Object
+      66: dup
+      67: iconst_0
+      68: iload_1
+      69: invokestatic  #178                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+      72: aastore
+      73: invokevirtual #182                // Method java/lang/reflect/Method.invoke:(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+      76: checkcast     #163                // class java/lang/Integer
+      79: invokevirtual #186                // Method java/lang/Integer.intValue:()I
+      82: ireturn
+}
+== $ java -cp '.;license-demo-vm.jar' PremiumApp 4321
+Exception in thread "main" java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:119)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:577)
+	at Feature.checkLicense(Feature.java:50)
+	at PremiumApp.main(PremiumApp.java:13)
+Caused by: java.lang.RuntimeException: Failed loading .meow data.
+	at obzcu.re.virtualmachine.ObzcureVM.<init>(ObzcureVM.java:157)
+	at obzcu.re.virtualmachine.ObzcureVM.virtualize(ObzcureVM.java:188)
+	at LicenseDemo.checkLicense(Unknown Source)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	... 3 more
+== $ java -cp '.;license-demo-vm.jar' PremiumApp 9999
+Exception in thread "main" java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:119)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:577)
+	at Feature.checkLicense(Feature.java:50)
+	at PremiumApp.main(PremiumApp.java:13)
+Caused by: java.lang.RuntimeException: Failed loading .meow data.
+	at obzcu.re.virtualmachine.ObzcureVM.<init>(ObzcureVM.java:157)
+	at obzcu.re.virtualmachine.ObzcureVM.virtualize(ObzcureVM.java:188)
+	at LicenseDemo.checkLicense(Unknown Source)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	... 3 more
+== $ java -jar license-demo-vm.jar
+Exception in thread "main" java.lang.RuntimeException: Failed loading .meow data.
+	at obzcu.re.virtualmachine.ObzcureVM.<init>(ObzcureVM.java:157)
+	at obzcu.re.virtualmachine.ObzcureVM.virtualize(ObzcureVM.java:188)
+	at LicenseDemo.checkLicense(Unknown Source)
+	at LicenseDemo.main(Unknown Source)
+== $ javap -c -p -classpath jar_x obzcu.re.virtualmachine.BlobCrypto
+Compiled from "BlobCrypto.java"
+public final class obzcu.re.virtualmachine.BlobCrypto {
+  private static final int IV_LEN;
+
+  private static final int TAG_BITS;
+
+  public static final boolean DEV_MODE;
+
+  private obzcu.re.virtualmachine.BlobCrypto();
+    Code:
+       0: aload_0
+       1: invokespecial #22                 // Method java/lang/Object."<init>":()V
+       4: return
+
+  private static javax.crypto.spec.SecretKeySpec keyFromSeed(long) throws java.lang.Exception;
+    Code:
+       0: lload_0
+       1: invokestatic  #32                 // Method fingerprint:()Ljava/lang/String;
+       4: invokedynamic #44,  0             // InvokeDynamic #0:makeConcatWithConstants:(JLjava/lang/String;)Ljava/lang/String;
+       9: ldc           #46                 // String UTF-8
+      11: invokevirtual #52                 // Method java/lang/String.getBytes:(Ljava/lang/String;)[B
+      14: astore_2
+      15: ldc           #54                 // String SHA-256
+      17: invokestatic  #60                 // Method java/security/MessageDigest.getInstance:(Ljava/lang/String;)Ljava/security/MessageDigest;
+      20: aload_2
+      21: invokevirtual #64                 // Method java/security/MessageDigest.digest:([B)[B
+      24: astore_3
+      25: new           #66                 // class javax/crypto/spec/SecretKeySpec
+      28: dup
+      29: aload_3
+      30: ldc           #68                 // String AES
+      32: invokespecial #71                 // Method javax/crypto/spec/SecretKeySpec."<init>":([BLjava/lang/String;)V
+      35: areturn
+
+  static java.lang.String fingerprint();
+    Code:
+       0: new           #78                 // class java/lang/StringBuilder
+       3: dup
+       4: invokespecial #79                 // Method java/lang/StringBuilder."<init>":()V
+       7: astore_0
+       8: aload_0
+       9: ldc           #81                 // String os.name
+      11: invokestatic  #87                 // Method java/lang/System.getProperty:(Ljava/lang/String;)Ljava/lang/String;
+      14: invokevirtual #91                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+      17: bipush        124
+      19: invokevirtual #94                 // Method java/lang/StringBuilder.append:(C)Ljava/lang/StringBuilder;
+      22: pop
+      23: aload_0
+      24: ldc           #96                 // String os.arch
+      26: invokestatic  #87                 // Method java/lang/System.getProperty:(Ljava/lang/String;)Ljava/lang/String;
+      29: invokevirtual #91                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+      32: bipush        124
+      34: invokevirtual #94                 // Method java/lang/StringBuilder.append:(C)Ljava/lang/StringBuilder;
+      37: pop
+      38: aload_0
+      39: invokestatic  #102                // Method java/lang/Runtime.getRuntime:()Ljava/lang/Runtime;
+      42: invokevirtual #106                // Method java/lang/Runtime.availableProcessors:()I
+      45: invokevirtual #109                // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+      48: bipush        124
+      50: invokevirtual #94                 // Method java/lang/StringBuilder.append:(C)Ljava/lang/StringBuilder;
+      53: pop
+      54: aload_0
+      55: invokestatic  #115                // Method java/net/InetAddress.getLocalHost:()Ljava/net/InetAddress;
+      58: invokevirtual #118                // Method java/net/InetAddress.getHostName:()Ljava/lang/String;
+      61: invokevirtual #91                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+      64: pop
+      65: goto          69
+      68: astore_1
+      69: aload_0
+      70: bipush        124
+      72: invokevirtual #94                 // Method java/lang/StringBuilder.append:(C)Ljava/lang/StringBuilder;
+      75: pop
+      76: aload_0
+      77: new           #48                 // class java/lang/String
+      80: dup
+      81: ldc           #120                // String /etc/machine-id
+      83: iconst_0
+      84: anewarray     #48                 // class java/lang/String
+      87: invokestatic  #126                // InterfaceMethod java/nio/file/Path.of:(Ljava/lang/String;[Ljava/lang/String;)Ljava/nio/file/Path;
+      90: invokestatic  #132                // Method java/nio/file/Files.readAllBytes:(Ljava/nio/file/Path;)[B
+      93: getstatic     #138                // Field java/nio/charset/StandardCharsets.UTF_8:Ljava/nio/charset/Charset;
+      96: invokespecial #141                // Method java/lang/String."<init>":([BLjava/nio/charset/Charset;)V
+      99: invokevirtual #144                // Method java/lang/String.trim:()Ljava/lang/String;
+     102: invokevirtual #91                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     105: pop
+     106: goto          110
+     109: astore_1
+     110: aload_0
+     111: bipush        124
+     113: invokevirtual #94                 // Method java/lang/StringBuilder.append:(C)Ljava/lang/StringBuilder;
+     116: pop
+     117: invokestatic  #150                // Method java/net/NetworkInterface.getNetworkInterfaces:()Ljava/util/Enumeration;
+     120: astore_1
+     121: aload_1
+     122: invokeinterface #156,  1          // InterfaceMethod java/util/Enumeration.hasMoreElements:()Z
+     127: ifeq          203
+     130: aload_1
+     131: invokeinterface #160,  1          // InterfaceMethod java/util/Enumeration.nextElement:()Ljava/lang/Object;
+     136: checkcast     #146                // class java/net/NetworkInterface
+     139: invokevirtual #164                // Method java/net/NetworkInterface.getHardwareAddress:()[B
+     142: astore_2
+     143: aload_2
+     144: ifnull        200
+     147: aload_2
+     148: astore_3
+     149: aload_3
+     150: arraylength
+     151: istore        4
+     153: iconst_0
+     154: istore        5
+     156: iload         5
+     158: iload         4
+     160: if_icmpge     197
+     163: aload_3
+     164: iload         5
+     166: baload
+     167: istore        6
+     169: aload_0
+     170: ldc           #167                // String %02x
+     172: iconst_1
+     173: anewarray     #4                  // class java/lang/Object
+     176: dup
+     177: iconst_0
+     178: iload         6
+     180: invokestatic  #173                // Method java/lang/Byte.valueOf:(B)Ljava/lang/Byte;
+     183: aastore
+     184: invokestatic  #177                // Method java/lang/String.format:(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+     187: invokevirtual #91                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     190: pop
+     191: iinc          5, 1
+     194: goto          156
+     197: goto          203
+     200: goto          121
+     203: goto          207
+     206: astore_1
+     207: ldc           #54                 // String SHA-256
+     209: invokestatic  #60                 // Method java/security/MessageDigest.getInstance:(Ljava/lang/String;)Ljava/security/MessageDigest;
+     212: aload_0
+     213: invokevirtual #180                // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     216: getstatic     #138                // Field java/nio/charset/StandardCharsets.UTF_8:Ljava/nio/charset/Charset;
+     219: invokevirtual #183                // Method java/lang/String.getBytes:(Ljava/nio/charset/Charset;)[B
+     222: invokevirtual #64                 // Method java/security/MessageDigest.digest:([B)[B
+     225: astore_1
+     226: new           #78                 // class java/lang/StringBuilder
+     229: dup
+     230: invokespecial #79                 // Method java/lang/StringBuilder."<init>":()V
+     233: astore_2
+     234: aload_1
+     235: astore_3
+     236: aload_3
+     237: arraylength
+     238: istore        4
+     240: iconst_0
+     241: istore        5
+     243: iload         5
+     245: iload         4
+     247: if_icmpge     284
+     250: aload_3
+     251: iload         5
+     253: baload
+     254: istore        6
+     256: aload_2
+     257: ldc           #167                // String %02x
+     259: iconst_1
+     260: anewarray     #4                  // class java/lang/Object
+     263: dup
+     264: iconst_0
+     265: iload         6
+     267: invokestatic  #173                // Method java/lang/Byte.valueOf:(B)Ljava/lang/Byte;
+     270: aastore
+     271: invokestatic  #177                // Method java/lang/String.format:(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+     274: invokevirtual #91                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+     277: pop
+     278: iinc          5, 1
+     281: goto          243
+     284: aload_2
+     285: invokevirtual #180                // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     288: areturn
+     289: astore_0
+     290: ldc           #185                // String unknown
+     292: areturn
+    Exception table:
+       from    to  target type
+          54    65    68   Class java/lang/Exception
+          76   106   109   Class java/lang/Exception
+         117   203   206   Class java/lang/Exception
+           0   288   289   Class java/lang/Exception
+
+  public static byte[] encrypt(byte[], long);
+    Code:
+       0: bipush        12
+       2: newarray       byte
+       4: astore_3
+       5: new           #201                // class java/security/SecureRandom
+       8: dup
+       9: invokespecial #202                // Method java/security/SecureRandom."<init>":()V
+      12: aload_3
+      13: invokevirtual #206                // Method java/security/SecureRandom.nextBytes:([B)V
+      16: ldc           #208                // String AES/GCM/NoPadding
+      18: invokestatic  #213                // Method javax/crypto/Cipher.getInstance:(Ljava/lang/String;)Ljavax/crypto/Cipher;
+      21: astore        4
+      23: aload         4
+      25: iconst_1
+      26: lload_1
+      27: invokestatic  #215                // Method keyFromSeed:(J)Ljavax/crypto/spec/SecretKeySpec;
+      30: new           #217                // class javax/crypto/spec/GCMParameterSpec
+      33: dup
+      34: sipush        128
+      37: aload_3
+      38: invokespecial #220                // Method javax/crypto/spec/GCMParameterSpec."<init>":(I[B)V
+      41: invokevirtual #224                // Method javax/crypto/Cipher.init:(ILjava/security/Key;Ljava/security/spec/AlgorithmParameterSpec;)V
+      44: aload         4
+      46: aload_0
+      47: invokevirtual #227                // Method javax/crypto/Cipher.doFinal:([B)[B
+      50: astore        5
+      52: bipush        12
+      54: aload         5
+      56: arraylength
+      57: iadd
+      58: newarray       byte
+      60: astore        6
+      62: aload_3
+      63: iconst_0
+      64: aload         6
+      66: iconst_0
+      67: bipush        12
+      69: invokestatic  #231                // Method java/lang/System.arraycopy:(Ljava/lang/Object;ILjava/lang/Object;II)V
+      72: aload         5
+      74: iconst_0
+      75: aload         6
+      77: bipush        12
+      79: aload         5
+      81: arraylength
+      82: invokestatic  #231                // Method java/lang/System.arraycopy:(Ljava/lang/Object;ILjava/lang/Object;II)V
+      85: aload         6
+      87: areturn
+      88: astore_3
+      89: new           #233                // class java/lang/RuntimeException
+      92: dup
+      93: ldc           #235                // String blob encryption failed
+      95: aload_3
+      96: invokespecial #238                // Method java/lang/RuntimeException."<init>":(Ljava/lang/String;Ljava/lang/Throwable;)V
+      99: athrow
+    Exception table:
+       from    to  target type
+           0    87    88   Class java/lang/Exception
+
+  public static byte[] decrypt(byte[], long);
+    Code:
+       0: ldc           #208                // String AES/GCM/NoPadding
+       2: invokestatic  #213                // Method javax/crypto/Cipher.getInstance:(Ljava/lang/String;)Ljavax/crypto/Cipher;
+       5: astore_3
+       6: aload_3
+       7: iconst_2
+       8: lload_1
+       9: invokestatic  #215                // Method keyFromSeed:(J)Ljavax/crypto/spec/SecretKeySpec;
+      12: new           #217                // class javax/crypto/spec/GCMParameterSpec
+      15: dup
+      16: sipush        128
+      19: aload_0
+      20: iconst_0
+      21: bipush        12
+      23: invokespecial #248                // Method javax/crypto/spec/GCMParameterSpec."<init>":(I[BII)V
+      26: invokevirtual #224                // Method javax/crypto/Cipher.init:(ILjava/security/Key;Ljava/security/spec/AlgorithmParameterSpec;)V
+      29: aload_3
+      30: aload_0
+      31: bipush        12
+      33: aload_0
+      34: arraylength
+      35: bipush        12
+      37: isub
+      38: invokevirtual #251                // Method javax/crypto/Cipher.doFinal:([BII)[B
+      41: areturn
+      42: astore_3
+      43: new           #233                // class java/lang/RuntimeException
+      46: dup
+      47: ldc           #253                // String blob decryption failed (tampered blob or wrong seed)
+      49: aload_3
+      50: invokespecial #238                // Method java/lang/RuntimeException."<init>":(Ljava/lang/String;Ljava/lang/Throwable;)V
+      53: athrow
+    Exception table:
+       from    to  target type
+           0    41    42   Class java/lang/Exception
+}
+== $ javap -c -p -classpath jar_x obzcu.re.virtualmachine.ObzcureVM | sed -n '1,120p'
+Compiled from "ObzcureVM.java"
+public final class obzcu.re.virtualmachine.ObzcureVM {
+  private final java.util.Map<java.lang.Integer, java.lang.Object> localsMap;
+
+  private final obzcu.re.virtualmachine.VMStack vmStack;
+
+  private final obzcu.re.virtualmachine.asm.VMTryCatch[] tryCatch;
+
+  private final java.lang.invoke.MethodHandles$Lookup lookup;
+
+  private final obzcu.re.virtualmachine.types.VMNode[] instructions;
+
+  private int pointer;
+
+  private int lineNumber;
+
+  private java.lang.String className;
+
+  private java.lang.String methodName;
+
+  private java.lang.String methodDesc;
+
+  private static volatile java.lang.Long cachedSeed;
+
+  private static final java.util.Map<java.lang.Integer, byte[]> meowData;
+
+  public boolean debug;
+
+  public boolean printThrowable;
+
+  private static final java.util.Map<java.lang.String, java.lang.Class<?>> classCache;
+
+  private static final java.util.Map<java.lang.String, obzcu.re.virtualmachine.ObzcureVM$Duo<java.lang.reflect.Field, java.lang.invoke.MethodHandle>> fieldGetterCache;
+
+  private static final java.util.Map<java.lang.String, obzcu.re.virtualmachine.ObzcureVM$Duo<java.lang.reflect.Field, java.lang.invoke.MethodHandle>> fieldSetterCache;
+
+  private static final java.util.Map<java.lang.String, java.lang.reflect.Field> fieldCache;
+
+  private static final java.util.Map<java.lang.String, java.lang.invoke.MethodHandle> methodHandleCache;
+
+  private static final java.util.Map<java.lang.String, java.lang.invoke.MethodHandle> methodSpecialCache;
+
+  private static final java.util.Map<java.lang.String, java.lang.reflect.Method> methodCache;
+
+  private static final java.util.Map<java.lang.String, java.lang.reflect.Constructor<?>> constructorCache;
+
+  private final java.lang.String[] OPCODE_NAMES;
+
+  private static void antiDebugCheck();
+    Code:
+       0: invokestatic  #81                 // Method java/lang/management/ManagementFactory.getRuntimeMXBean:()Ljava/lang/management/RuntimeMXBean;
+       3: invokeinterface #87,  1           // InterfaceMethod java/lang/management/RuntimeMXBean.getInputArguments:()Ljava/util/List;
+       8: invokeinterface #93,  1           // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+      13: astore_0
+      14: aload_0
+      15: invokeinterface #99,  1           // InterfaceMethod java/util/Iterator.hasNext:()Z
+      20: ifeq          96
+      23: aload_0
+      24: invokeinterface #103,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      29: checkcast     #105                // class java/lang/String
+      32: astore_1
+      33: aload_1
+      34: invokevirtual #109                // Method java/lang/String.toLowerCase:()Ljava/lang/String;
+      37: astore_2
+      38: aload_2
+      39: ldc           #111                // String jdwp
+      41: invokevirtual #115                // Method java/lang/String.contains:(Ljava/lang/CharSequence;)Z
+      44: ifne          83
+      47: aload_2
+      48: ldc           #117                // String -xdebug
+      50: invokevirtual #115                // Method java/lang/String.contains:(Ljava/lang/CharSequence;)Z
+      53: ifne          83
+      56: aload_2
+      57: ldc           #119                // String -agentlib
+      59: invokevirtual #115                // Method java/lang/String.contains:(Ljava/lang/CharSequence;)Z
+      62: ifne          83
+      65: aload_2
+      66: ldc           #121                // String -agentpath
+      68: invokevirtual #115                // Method java/lang/String.contains:(Ljava/lang/CharSequence;)Z
+      71: ifne          83
+      74: aload_2
+      75: ldc           #123                // String -javaagent
+      77: invokevirtual #115                // Method java/lang/String.contains:(Ljava/lang/CharSequence;)Z
+      80: ifeq          93
+      83: new           #125                // class java/lang/IllegalStateException
+      86: dup
+      87: ldc           #127                // String Debugger or instrumentation agent detected; refusing to run.
+      89: invokespecial #131                // Method java/lang/IllegalStateException."<init>":(Ljava/lang/String;)V
+      92: athrow
+      93: goto          14
+      96: return
+
+  private static long fetchSeed();
+    Code:
+       0: invokestatic  #141                // Method antiDebugCheck:()V
+       3: getstatic     #143                // Field cachedSeed:Ljava/lang/Long;
+       6: astore_0
+       7: aload_0
+       8: ifnull        16
+      11: aload_0
+      12: invokevirtual #148                // Method java/lang/Long.longValue:()J
+      15: lreturn
+      16: ldc           #150                // String obzcure.server
+      18: ldc           #152                // String https://localhost:8443
+      20: invokestatic  #158                // Method java/lang/System.getProperty:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+      23: astore_1
+      24: aload_1
+      25: invokevirtual #109                // Method java/lang/String.toLowerCase:()Ljava/lang/String;
+      28: ldc           #160                // String https://
+      30: invokevirtual #164                // Method java/lang/String.startsWith:(Ljava/lang/String;)Z
+      33: ifne          46
+      36: new           #125                // class java/lang/IllegalStateException
+      39: dup
+      40: ldc           #166                // String Release requires an https license server; refusing cleartext.
+      42: invokespecial #131                // Method java/lang/IllegalStateException."<init>":(Ljava/lang/String;)V
+      45: athrow
+      46: ldc           #168                // String javax.net.ssl.trustStore
+      48: invokestatic  #171                // Method java/lang/System.getProperty:(Ljava/lang/String;)Ljava/lang/String;
+      51: ifnonnull     64
+      54: new           #125                // class java/lang/IllegalStateException
+== $ javap -c -p ObzcureVM lines 120-320
+      54: new           #125                // class java/lang/IllegalStateException
+      57: dup
+      58: ldc           #173                // String Release requires a pinned trust store (-Djavax.net.ssl.trustStore); refusing default CA trust.
+      60: invokespecial #131                // Method java/lang/IllegalStateException."<init>":(Ljava/lang/String;)V
+      63: athrow
+      64: ldc           #175                // String obzcure.license
+      66: invokestatic  #171                // Method java/lang/System.getProperty:(Ljava/lang/String;)Ljava/lang/String;
+      69: astore_2
+      70: aload_2
+      71: ifnonnull     84
+      74: new           #125                // class java/lang/IllegalStateException
+      77: dup
+      78: ldc           #177                // String No license provided: set -Dobzcure.license=... (the license server delivers the seed).
+      80: invokespecial #131                // Method java/lang/IllegalStateException."<init>":(Ljava/lang/String;)V
+      83: athrow
+      84: invokestatic  #183                // Method java/net/http/HttpClient.newHttpClient:()Ljava/net/http/HttpClient;
+      87: astore_3
+      88: invokestatic  #187                // Method java/net/http/HttpRequest.newBuilder:()Ljava/net/http/HttpRequest$Builder;
+      91: aload_1
+      92: aload_2
+      93: getstatic     #193                // Field java/nio/charset/StandardCharsets.UTF_8:Ljava/nio/charset/Charset;
+      96: invokestatic  #199                // Method java/net/URLEncoder.encode:(Ljava/lang/String;Ljava/nio/charset/Charset;)Ljava/lang/String;
+      99: invokestatic  #202                // Method fingerprint:()Ljava/lang/String;
+     102: getstatic     #193                // Field java/nio/charset/StandardCharsets.UTF_8:Ljava/nio/charset/Charset;
+     105: invokestatic  #199                // Method java/net/URLEncoder.encode:(Ljava/lang/String;Ljava/nio/charset/Charset;)Ljava/lang/String;
+     108: invokedynamic #214,  0            // InvokeDynamic #0:makeConcatWithConstants:(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+     113: invokestatic  #220                // Method java/net/URI.create:(Ljava/lang/String;)Ljava/net/URI;
+     116: invokeinterface #224,  2          // InterfaceMethod java/net/http/HttpRequest$Builder.uri:(Ljava/net/URI;)Ljava/net/http/HttpRequest$Builder;
+     121: invokeinterface #227,  1          // InterfaceMethod java/net/http/HttpRequest$Builder.GET:()Ljava/net/http/HttpRequest$Builder;
+     126: invokeinterface #231,  1          // InterfaceMethod java/net/http/HttpRequest$Builder.build:()Ljava/net/http/HttpRequest;
+     131: astore        4
+     133: aload_3
+     134: aload         4
+     136: invokestatic  #235                // Method java/net/http/HttpResponse$BodyHandlers.ofString:()Ljava/net/http/HttpResponse$BodyHandler;
+     139: invokevirtual #239                // Method java/net/http/HttpClient.send:(Ljava/net/http/HttpRequest;Ljava/net/http/HttpResponse$BodyHandler;)Ljava/net/http/HttpResponse;
+     142: astore        5
+     144: aload         5
+     146: invokeinterface #243,  1          // InterfaceMethod java/net/http/HttpResponse.statusCode:()I
+     151: sipush        200
+     154: if_icmpeq     187
+     157: new           #125                // class java/lang/IllegalStateException
+     160: dup
+     161: aload         5
+     163: invokeinterface #243,  1          // InterfaceMethod java/net/http/HttpResponse.statusCode:()I
+     168: aload         5
+     170: invokeinterface #246,  1          // InterfaceMethod java/net/http/HttpResponse.body:()Ljava/lang/Object;
+     175: checkcast     #105                // class java/lang/String
+     178: invokedynamic #251,  0            // InvokeDynamic #1:makeConcatWithConstants:(ILjava/lang/String;)Ljava/lang/String;
+     183: invokespecial #131                // Method java/lang/IllegalStateException."<init>":(Ljava/lang/String;)V
+     186: athrow
+     187: aload         5
+     189: invokeinterface #246,  1          // InterfaceMethod java/net/http/HttpResponse.body:()Ljava/lang/Object;
+     194: checkcast     #105                // class java/lang/String
+     197: invokevirtual #254                // Method java/lang/String.trim:()Ljava/lang/String;
+     200: invokestatic  #258                // Method java/lang/Long.parseLong:(Ljava/lang/String;)J
+     203: lstore        6
+     205: lload         6
+     207: invokestatic  #262                // Method java/lang/Long.valueOf:(J)Ljava/lang/Long;
+     210: putstatic     #143                // Field cachedSeed:Ljava/lang/Long;
+     213: lload         6
+     215: lreturn
+     216: astore_3
+     217: new           #125                // class java/lang/IllegalStateException
+     220: dup
+     221: aload_1
+     222: aload_3
+     223: invokevirtual #267                // Method java/lang/Exception.getMessage:()Ljava/lang/String;
+     226: invokedynamic #271,  0            // InvokeDynamic #2:makeConcatWithConstants:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+     231: aload_3
+     232: invokespecial #274                // Method java/lang/IllegalStateException."<init>":(Ljava/lang/String;Ljava/lang/Throwable;)V
+     235: athrow
+    Exception table:
+       from    to  target type
+          84   215   216   Class java/io/IOException
+          84   215   216   Class java/lang/InterruptedException
+
+  private static java.lang.String fingerprint();
+    Code:
+       0: invokestatic  #291                // Method obzcu/re/virtualmachine/BlobCrypto.fingerprint:()Ljava/lang/String;
+       3: areturn
+
+  public obzcu.re.virtualmachine.ObzcureVM(int, int, int);
+    Code:
+       0: aload_0
+       1: iload_1
+       2: iload_2
+       3: iload_3
+       4: aconst_null
+       5: aconst_null
+       6: invokespecial #295                // Method "<init>":(III[Lobzcu/re/virtualmachine/asm/VMTryCatch;Ljava/lang/invoke/MethodHandles$Lookup;)V
+       9: return
+
+  public obzcu.re.virtualmachine.ObzcureVM(int, int, int, obzcu.re.virtualmachine.asm.VMTryCatch[]);
+    Code:
+       0: aload_0
+       1: iload_1
+       2: iload_2
+       3: iload_3
+       4: aload         4
+       6: aconst_null
+       7: invokespecial #295                // Method "<init>":(III[Lobzcu/re/virtualmachine/asm/VMTryCatch;Ljava/lang/invoke/MethodHandles$Lookup;)V
+      10: return
+
+  public obzcu.re.virtualmachine.ObzcureVM(int, int, int, obzcu.re.virtualmachine.asm.VMTryCatch[], java.lang.invoke.MethodHandles$Lookup);
+    Code:
+       0: aload_0
+       1: invokespecial #305                // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: iconst_0
+       6: putfield      #307                // Field pointer:I
+       9: aload_0
+      10: iconst_0
+      11: putfield      #309                // Field lineNumber:I
+      14: aload_0
+      15: aconst_null
+      16: putfield      #311                // Field className:Ljava/lang/String;
+      19: aload_0
+      20: aconst_null
+      21: putfield      #313                // Field methodName:Ljava/lang/String;
+      24: aload_0
+      25: aconst_null
+      26: putfield      #315                // Field methodDesc:Ljava/lang/String;
+      29: aload_0
+      30: iconst_0
+      31: putfield      #317                // Field debug:Z
+      34: aload_0
+      35: iconst_0
+      36: putfield      #319                // Field printThrowable:Z
+      39: aload_0
+      40: sipush        203
+      43: anewarray     #105                // class java/lang/String
+      46: dup
+      47: iconst_0
+      48: ldc_w         #321                // String nop
+      51: aastore
+      52: dup
+      53: iconst_1
+      54: ldc_w         #323                // String aconst_null
+      57: aastore
+      58: dup
+      59: iconst_2
+      60: ldc_w         #325                // String iconst_m1
+      63: aastore
+      64: dup
+      65: iconst_3
+      66: ldc_w         #327                // String iconst_0
+      69: aastore
+      70: dup
+      71: iconst_4
+      72: ldc_w         #329                // String iconst_1
+      75: aastore
+      76: dup
+      77: iconst_5
+      78: ldc_w         #331                // String iconst_2
+      81: aastore
+      82: dup
+      83: bipush        6
+      85: ldc_w         #333                // String iconst_3
+      88: aastore
+      89: dup
+      90: bipush        7
+      92: ldc_w         #335                // String iconst_4
+      95: aastore
+      96: dup
+      97: bipush        8
+      99: ldc_w         #337                // String iconst_5
+     102: aastore
+     103: dup
+     104: bipush        9
+     106: ldc_w         #339                // String lconst_0
+     109: aastore
+     110: dup
+     111: bipush        10
+     113: ldc_w         #341                // String lconst_1
+     116: aastore
+     117: dup
+     118: bipush        11
+     120: ldc_w         #343                // String fconst_0
+     123: aastore
+     124: dup
+     125: bipush        12
+     127: ldc_w         #345                // String fconst_1
+     130: aastore
+     131: dup
+     132: bipush        13
+     134: ldc_w         #347                // String fconst_2
+     137: aastore
+     138: dup
+     139: bipush        14
+     141: ldc_w         #349                // String dconst_0
+     144: aastore
+     145: dup
+     146: bipush        15
+     148: ldc_w         #351                // String dconst_1
+     151: aastore
+     152: dup
+     153: bipush        16
+     155: ldc_w         #353                // String bipush
+     158: aastore
+     159: dup
+     160: bipush        17
+     162: ldc_w         #355                // String sipush
+     165: aastore
+     166: dup
+     167: bipush        18
+     169: ldc_w         #357                // String ldc
+     172: aastore
+     173: dup
+     174: bipush        19
+     176: ldc_w         #359                // String ldc_w
+     179: aastore
+     180: dup
+     181: bipush        20
+     183: ldc_w         #361                // String ldc2_w
+     186: aastore
+     187: dup
+     188: bipush        21
+     190: ldc_w         #363                // String iload
+     193: aastore
+     194: dup
+     195: bipush        22
+== $ javap -c -p ObzcureVM | grep -n -E 'Failed loading|BlobCrypto|meowData|fetchSeed|cats.meow|getResource|loadMeow|Meow' 
+25:  private static final java.util.Map<java.lang.Integer, byte[]> meowData;
+66:      39: ldc           #111                // String jdwp
+70:      48: ldc           #117                // String -xdebug
+74:      57: ldc           #119                // String -agentlib
+78:      66: ldc           #121                // String -agentpath
+82:      75: ldc           #123                // String -javaagent
+87:      87: ldc           #127                // String Debugger or instrumentation agent detected; refusing to run.
+93:  private static long fetchSeed();
+103:      16: ldc           #150                // String obzcure.server
+104:      18: ldc           #152                // String https://localhost:8443
+109:      28: ldc           #160                // String https://
+114:      40: ldc           #166                // String Release requires an https license server; refusing cleartext.
+117:      46: ldc           #168                // String javax.net.ssl.trustStore
+122:      58: ldc           #173                // String Release requires a pinned trust store (-Djavax.net.ssl.trustStore); refusing default CA trust.
+125:      64: ldc           #175                // String obzcure.license
+132:      78: ldc           #177                // String No license provided: set -Dobzcure.license=... (the license server delivers the seed).
+198:       0: invokestatic  #291                // Method obzcu/re/virtualmachine/BlobCrypto.fingerprint:()Ljava/lang/String;
+253:      48: ldc_w         #321                // String nop
+257:      54: ldc_w         #323                // String aconst_null
+261:      60: ldc_w         #325                // String iconst_m1
+265:      66: ldc_w         #327                // String iconst_0
+269:      72: ldc_w         #329                // String iconst_1
+273:      78: ldc_w         #331                // String iconst_2
+277:      85: ldc_w         #333                // String iconst_3
+281:      92: ldc_w         #335                // String iconst_4
+285:      99: ldc_w         #337                // String iconst_5
+289:     106: ldc_w         #339                // String lconst_0
+293:     113: ldc_w         #341                // String lconst_1
+297:     120: ldc_w         #343                // String fconst_0
+301:     127: ldc_w         #345                // String fconst_1
+305:     134: ldc_w         #347                // String fconst_2
+309:     141: ldc_w         #349                // String dconst_0
+313:     148: ldc_w         #351                // String dconst_1
+317:     155: ldc_w         #353                // String bipush
+321:     162: ldc_w         #355                // String sipush
+325:     169: ldc_w         #357                // String ldc
+329:     176: ldc_w         #359                // String ldc_w
+333:     183: ldc_w         #361                // String ldc2_w
+337:     190: ldc_w         #363                // String iload
+341:     197: ldc_w         #365                // String lload
+345:     204: ldc_w         #367                // String fload
+349:     211: ldc_w         #369                // String dload
+353:     218: ldc_w         #371                // String aload
+357:     225: ldc_w         #373                // String iload_0
+361:     232: ldc_w         #375                // String iload_1
+365:     239: ldc_w         #377                // String iload_2
+369:     246: ldc_w         #379                // String iload_3
+373:     253: ldc_w         #381                // String lload_0
+377:     260: ldc_w         #383                // String lload_1
+381:     267: ldc_w         #385                // String lload_2
+385:     274: ldc_w         #387                // String lload_3
+389:     281: ldc_w         #389                // String fload_0
+393:     288: ldc_w         #391                // String fload_1
+397:     295: ldc_w         #393                // String fload_2
+401:     302: ldc_w         #395                // String fload_3
+405:     309: ldc_w         #397                // String dload_0
+409:     316: ldc_w         #399                // String dload_1
+413:     323: ldc_w         #401                // String dload_2
+417:     330: ldc_w         #403                // String dload_3
+421:     337: ldc_w         #405                // String aload_0
+425:     344: ldc_w         #407                // String aload_1
+429:     351: ldc_w         #409                // String aload_2
+433:     358: ldc_w         #411                // String aload_3
+437:     365: ldc_w         #413                // String iaload
+441:     372: ldc_w         #415                // String laload
+445:     379: ldc_w         #417                // String faload
+449:     386: ldc_w         #419                // String daload
+453:     393: ldc_w         #421                // String aaload
+457:     400: ldc_w         #423                // String baload
+461:     407: ldc_w         #425                // String caload
+465:     414: ldc_w         #427                // String saload
+469:     421: ldc_w         #429                // String istore
+473:     428: ldc_w         #431                // String lstore
+477:     435: ldc_w         #433                // String fstore
+481:     442: ldc_w         #435                // String dstore
+485:     449: ldc_w         #437                // String astore
+489:     456: ldc_w         #439                // String istore_0
+493:     463: ldc_w         #441                // String istore_1
+497:     470: ldc_w         #443                // String istore_2
+501:     477: ldc_w         #445                // String istore_3
+== $ javap -c -p ObzcureVM static-init and load section (grep context)
+25:  private static final java.util.Map<java.lang.Integer, byte[]> meowData;
+93:  private static long fetchSeed();
+198:       0: invokestatic  #291                // Method obzcu/re/virtualmachine/BlobCrypto.fingerprint:()Ljava/lang/String;
+1083:    1576: invokestatic  #747                // Method fetchSeed:()J
+1085:    1581: getstatic     #749                // Field meowData:Ljava/util/Map;
+1091:    1598: invokestatic  #766                // Method obzcu/re/virtualmachine/BlobCrypto.decrypt:([BJ)[B
+1109:    1638: ldc_w         #789                // String Failed loading .meow data.
+3236:  static {};
+3243:      11: putstatic     #749                // Field meowData:Ljava/util/Map;
+3245:      16: ldc_w         #1406               // String /obzcure/cats.meow
+3246:      19: invokevirtual #1410               // Method java/lang/Class.getResourceAsStream:(Ljava/lang/String;)Ljava/io/InputStream;
+3270:      62: getstatic     #749                // Field meowData:Ljava/util/Map;
+3295:     114: ldc_w         #789                // String Failed loading .meow data.
+== $ ObzcureVM init blob-decrypt region
+    1558: invokespecial #739                // Method obzcu/re/virtualmachine/VMStack."<init>":(Lobzcu/re/virtualmachine/ObzcureVM;I)V
+    1561: putfield      #741                // Field vmStack:Lobzcu/re/virtualmachine/VMStack;
+    1564: aload_0
+    1565: aload         4
+    1567: putfield      #743                // Field tryCatch:[Lobzcu/re/virtualmachine/asm/VMTryCatch;
+    1570: aload_0
+    1571: aload         5
+    1573: putfield      #745                // Field lookup:Ljava/lang/invoke/MethodHandles$Lookup;
+    1576: invokestatic  #747                // Method fetchSeed:()J
+    1579: lstore        6
+    1581: getstatic     #749                // Field meowData:Ljava/util/Map;
+    1584: iload_1
+    1585: invokestatic  #754                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+    1588: invokeinterface #760,  2          // InterfaceMethod java/util/Map.get:(Ljava/lang/Object;)Ljava/lang/Object;
+    1593: checkcast     #762                // class "[B"
+    1596: lload         6
+    1598: invokestatic  #766                // Method obzcu/re/virtualmachine/BlobCrypto.decrypt:([BJ)[B
+    1601: astore        8
+    1603: aload_0
+    1604: aload_0
+    1605: new           #768                // class java/io/DataInputStream
+    1608: dup
+    1609: new           #770                // class java/io/ByteArrayInputStream
+    1612: dup
+    1613: aload         8
+    1615: invokespecial #773                // Method java/io/ByteArrayInputStream."<init>":([B)V
+    1618: invokespecial #776                // Method java/io/DataInputStream."<init>":(Ljava/io/InputStream;)V
+    1621: lload         6
+    1623: invokestatic  #782                // Method obzcu/re/virtualmachine/VMLoader.load:(Lobzcu/re/virtualmachine/ObzcureVM;Ljava/io/DataInputStream;J)[Lobzcu/re/virtualmachine/types/VMNode;
+    1626: putfield      #784                // Field instructions:[Lobzcu/re/virtualmachine/types/VMNode;
+    1629: goto          1645
+    1632: astore        6
+    1634: new           #787                // class java/lang/RuntimeException
+    1637: dup
+    1638: ldc_w         #789                // String Failed loading .meow data.
+    1641: invokespecial #790                // Method java/lang/RuntimeException."<init>":(Ljava/lang/String;)V
+    1644: athrow
+    1645: return
+    Exception table:
+       from    to  target type
+        1576  1629  1632   Class java/lang/Throwable
+== $ ObzcureVM static-init region
+  static {};
+    Code:
+       0: aconst_null
+       1: putstatic     #143                // Field cachedSeed:Ljava/lang/Long;
+       4: new           #729                // class java/util/HashMap
+       7: dup
+       8: invokespecial #919                // Method java/util/HashMap."<init>":()V
+      11: putstatic     #749                // Field meowData:Ljava/util/Map;
+      14: ldc           #2                  // class obzcu/re/virtualmachine/ObzcureVM
+      16: ldc_w         #1406               // String /obzcure/cats.meow
+      19: invokevirtual #1410               // Method java/lang/Class.getResourceAsStream:(Ljava/lang/String;)Ljava/io/InputStream;
+      22: astore_0
+      23: aload_0
+      24: ifnull        121
+      27: new           #768                // class java/io/DataInputStream
+      30: dup
+      31: aload_0
+      32: invokespecial #776                // Method java/io/DataInputStream."<init>":(Ljava/io/InputStream;)V
+      35: astore_1
+      36: aload_1
+      37: invokevirtual #1413               // Method java/io/DataInputStream.readInt:()I
+      40: istore_2
+      41: iconst_0
+      42: istore_3
+      43: iload_3
+      44: iload_2
+      45: if_icmpge     83
+      48: aload_1
+      49: invokevirtual #1413               // Method java/io/DataInputStream.readInt:()I
+      52: istore        4
+      54: aload_1
+      55: iload         4
+      57: invokevirtual #1419               // Method java/io/DataInputStream.readNBytes:(I)[B
+      60: astore        5
+      62: getstatic     #749                // Field meowData:Ljava/util/Map;
+      65: iload_3
+      66: invokestatic  #754                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+      69: aload         5
+      71: invokeinterface #816,  3          // InterfaceMethod java/util/Map.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+      76: pop
+      77: iinc          3, 1
+      80: goto          43
+      83: aload_1
+      84: invokevirtual #1422               // Method java/io/DataInputStream.close:()V
+      87: goto          106
+      90: astore_2
+      91: aload_1
+      92: invokevirtual #1422               // Method java/io/DataInputStream.close:()V
+      95: goto          104
+      98: astore_3
+      99: aload_2
+     100: aload_3
+     101: invokevirtual #1426               // Method java/lang/Throwable.addSuppressed:(Ljava/lang/Throwable;)V
+     104: aload_2
+     105: athrow
+     106: goto          121
+     109: astore_1
+     110: new           #787                // class java/lang/RuntimeException
+     113: dup
+     114: ldc_w         #789                // String Failed loading .meow data.
+     117: invokespecial #790                // Method java/lang/RuntimeException."<init>":(Ljava/lang/String;)V
+     120: athrow
+     121: new           #729                // class java/util/HashMap
+     124: dup
+     125: invokespecial #919                // Method java/util/HashMap."<init>":()V
+== $ ls -la jar_x/obzcure/cats.meow
+-rw-r--r-- 1 user 197121 647 Aug 27 07:54 jar_x/obzcure/cats.meow
+== $ xxd jar_x/obzcure/cats.meow
+00000000: 0000 0001 0000 027f 50ca 0e40 55d1 0889  ........P..@U...
+00000010: 73aa 96e0 0480 8a54 1fce cd73 bf66 d555  s......T...s.f.U
+00000020: 6463 0736 d43a d1cd 5385 7856 86c9 069c  dc.6.:..S.xV....
+00000030: d4b3 6f30 cdd4 83b6 8a9a 3497 8c8b ffdc  ..o0......4.....
+00000040: 9e31 cce4 f790 17d0 ad20 1858 b046 f3cf  .1....... .X.F..
+00000050: cda6 18e0 d2fd 8ca6 7964 55e3 ae72 db38  ........ydU..r.8
+00000060: 79b9 eccf 51b7 741f aad1 160d 7377 6960  y...Q.t.....swi`
+00000070: 88dc 4631 0b58 f9f2 4db0 8b29 ed90 2ddc  ..F1.X..M..)..-.
+00000080: f8a8 345a 2a18 286f 6ffa ce69 fc69 d00f  ..4Z*.(oo..i.i..
+00000090: cfb1 e062 fc63 a6b9 60f4 fcef e1bc b865  ...b.c..`......e
+000000a0: 8ccd a072 15ab 9663 2fdb f08f b54c d9c3  ...r...c/....L..
+000000b0: 76eb ef7a daf0 68e1 7170 1ec5 0428 fa21  v..z..h.qp...(.!
+000000c0: d6bc ac32 87eb 3c77 58b5 5dbd a1d5 dff3  ...2..<wX.].....
+000000d0: 1e5d 7a62 da54 4b9d 0a33 c6fb 02c5 fa68  .]zb.TK..3.....h
+000000e0: 6738 bec3 b055 9b8d 4707 2a93 f88f 8aba  g8...U..G.*.....
+000000f0: 6725 7acd 6622 52a0 3c6c 8418 a966 51a4  g%z.f"R.<l...fQ.
+00000100: 959f 7991 eb9a 6538 3c84 fbfc 683a 8f3c  ..y...e8<...h:.<
+00000110: 7e42 599a d101 dd42 6686 fd2a 3d89 ab7a  ~BY....Bf..*=..z
+00000120: 96ec b32e 9af2 cc88 e45e f990 f356 ac33  .........^...V.3
+00000130: 8965 c283 4f62 c5db 1a3b ff65 1942 87da  .e..Ob...;.e.B..
+00000140: a12f 2dce 93f0 d059 c3a6 29fb 1113 c666  ./-....Y..)....f
+00000150: ea78 0945 04ad bcd7 3469 d9be 548f eb8d  .x.E....4i..T...
+00000160: 59de 3bc0 046c 36e7 36d6 faa7 a1dd b99e  Y.;..l6.6.......
+00000170: bea6 4551 1ad3 e3ee 22bc 9e24 449b 6985  ..EQ...."..$D.i.
+00000180: 1b2a 53e3 3ef5 a337 76f7 6ba6 9202 c4e9  .*S.>..7v.k.....
+00000190: 2fb7 46b1 d1c3 96b2 ffe4 424a 8441 5f8e  /.F.......BJ.A_.
+000001a0: 8a63 37fb 2a6e 4635 bd67 834a 2de1 8523  .c7.*nF5.g.J-..#
+000001b0: cfec 78bb e589 66fa 1dfd 1dfc b3d7 cca3  ..x...f.........
+000001c0: adef 3ca9 de9d 1bac e35a 90de f9f4 f7b2  ..<......Z......
+000001d0: cf72 f45d 5477 841d 7e3b df0d 573d d04e  .r.]Tw..~;..W=.N
+000001e0: 5158 9379 2c52 5ed2 88ec f263 d442 7874  QX.y,R^....c.Bxt
+000001f0: e947 8404 78dc 24e6 d7d5 a523 9686 2a06  .G..x.$....#..*.
+00000200: 2bea a92f 88ab 2847 5990 63ad aca1 0bf9  +../..(GY.c.....
+00000210: a482 153b f5b2 3387 edc3 a509 b2c6 4b3e  ...;..3.......K>
+00000220: e735 0cb2 4046 fdb8 97c4 7244 a1c4 0eeb  .5..@F....rD....
+00000230: 49e1 f128 d576 3ccf 9f9b 08a8 a61f de46  I..(.v<........F
+00000240: 72e1 2625 fbb5 784a 2e51 260d ac65 b6b5  r.&%..xJ.Q&..e..
+00000250: a3e4 af05 59fb 6019 2a69 a49a 1938 a33e  ....Y.`.*i...8.>
+00000260: a1dc 7846 3952 e059 00d0 240d 705f 46a3  ..xF9R.Y..$.p_F.
+00000270: 51a4 11cb f99e 6279 7312 2442 b5f7 1596  Q.....bys.$B....
+00000280: 8506 5a9e 7032 21                        ..Z.p2!
+== $ strings-ish (printable runs >=4)
+['swi`', '<~BY', '*nF5', 'y,R^', 'xJ.Q&', 'xF9R']
+== $ python entropy+structure
+meow total 647 header count 1 len 639
+meow ciphertext entropy bits/byte 7.596 len 639
+feature.enc len 57 entropy 5.657
+feature.enc plaintext len (len-12iv-16tag)= 29
+== $ xxd feature.enc
+00000000: 4132 0c56 a8ee 105d bccc 98ef 5f97 6454  A2.V...]...._.dT
+00000010: 567d 72c5 c1b0 27a2 cb48 0cfa 5cb4 8693  V}r...'..H..\...
+00000020: aa40 85b2 2d68 aebe b0c2 0342 4d20 307f  .@..-h.....BM 0.
+00000030: 2fa2 d5c3 ef71 1ba3 39                   /....q..9
+== $ javac BruteForce.java && java BruteForce
+done tries=1600016 success=false
+== $ javap -c -p BlobCrypto static-init (DEV_MODE)
+== $ javap -c -p DiffTest
+4:  public static final java.lang.invoke.MethodHandles$Lookup lookup$obzcure;
+12:  public static void main(java.lang.String[]) throws java.lang.Exception;
+16:       4: ldc           #26                 // String license-demo.jar
+17:       6: invokespecial #29                 // Method java/io/File."<init>":(Ljava/lang/String;)V
+21:      14: ldc           #31                 // String license-demo-vm.jar
+22:      16: invokespecial #29                 // Method java/io/File."<init>":(Ljava/lang/String;)V
+53:      74: ldc           #56                 // String LicenseDemo
+54:      76: ldc           #58                 // String checkLicense
+55:      78: invokestatic  #62                 // Method load:(Ljava/lang/ClassLoader;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/reflect/Method;
+58:      85: ldc           #56                 // String LicenseDemo
+59:      87: ldc           #58                 // String checkLicense
+60:      89: invokestatic  #62                 // Method load:(Ljava/lang/ClassLoader;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/reflect/Method;
+111:     196: invokedynamic #105,  0            // InvokeDynamic #0:makeConcatWithConstants:(III)Ljava/lang/String;
+112:     201: invokevirtual #110                // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+119:     222: ldc           #114                // String Ran 1000000 random inputs.
+120:     224: invokevirtual #110                // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+123:     232: invokedynamic #119,  0            // InvokeDynamic #1:makeConcatWithConstants:(I)Ljava/lang/String;
+124:     237: invokevirtual #110                // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+128:     248: ldc           #121                // String PASS: virtualized checkLicense matches the original on every input.
+129:     250: invokevirtual #110                // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+132:     259: ldc           #123                // String FAIL: virtualization changed behavior. Investigate the inputs above.
+133:     261: invokevirtual #110                // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+136:  static java.lang.reflect.Method load(java.lang.ClassLoader, java.lang.String, java.lang.String) throws java.lang.Exception;
+141:       3: invokestatic  #131                // Method java/lang/Class.forName:(Ljava/lang/String;ZLjava/lang/ClassLoader;)Ljava/lang/Class;
+151:      19: invokevirtual #139                // Method java/lang/Class.getDeclaredMethod:(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+162:       3: putstatic     #150                // Field lookup$obzcure:Ljava/lang/invoke/MethodHandles$Lookup;
+== $ grep all constant-pool strings for seed/localhost across jar classes
+-- LicenseDemo
+         5: invokestatic  #24                 // Method checkLicense:(I)I
+        LicenseDemo$ApplyObzcureVM
+      #32 checkLicense(\u0001) = \u0001
+   #1 = Utf8               LicenseDemo
+   #2 = Class              #1             // LicenseDemo
+   #5 = Utf8               LicenseDemo$ApplyObzcureVM
+   #6 = Class              #5             // LicenseDemo$ApplyObzcureVM
+  #21 = Utf8               checkLicense
+  #23 = NameAndType        #21:#22        // checkLicense:(I)I
+  #24 = Methodref          #2.#23         // LicenseDemo.checkLicense:(I)I
+  #31 = Utf8               checkLicense(\u0001) = \u0001
+  #32 = String             #31            // checkLicense(\u0001) = \u0001
+  #49 = Utf8               LLicenseDemo$ApplyObzcureVM;
+  #51 = Fieldref           #2.#50         // LicenseDemo.lookup$obzcure:Ljava/lang/invoke/MethodHandles$Lookup;
+  LicenseDemo$ApplyObzcureVM
+  public LicenseDemo();
+  public static #7= #6 of #2;             // ApplyObzcureVM=class LicenseDemo$ApplyObzcureVM of class LicenseDemo
+  public static int checkLicense(int);
+  this_class: #2                          // LicenseDemo
+Classfile <sandbox>/attack-B2-hardened/jar_x/LicenseDemo.class
+public class LicenseDemo
+-- obzcu.re.virtualmachine.ObzcureVM
+           70     166     2 license   Ljava/lang/String;
+          205      11     6  seed   J
+         1581      48     6  seed   J
+         1: putstatic     #143                // Field cachedSeed:Ljava/lang/Long;
+         3: getstatic     #143                // Field cachedSeed:Ljava/lang/Long;
+        16: ldc           #150                // String obzcure.server
+        18: ldc           #152                // String https://localhost:8443
+        40: ldc           #166                // String Release requires an https license server; refusing cleartext.
+        46: ldc           #168                // String javax.net.ssl.trustStore
+        58: ldc           #173                // String Release requires a pinned trust store (-Djavax.net.ssl.trustStore); refusing default CA trust.
+        64: ldc           #175                // String obzcure.license
+        78: ldc           #177                // String No license provided: set -Dobzcure.license=... (the license server delivers the seed).
+       210: putstatic     #143                // Field cachedSeed:Ljava/lang/Long;
+      #204 \u0001/seed?license=\u0001&fingerprint=\u0001
+      #248 License server refused the license (HTTP \u0001): \u0001
+      #269 Could not reach the license server at \u0001: \u0001
+      1576: invokestatic  #747                // Method fetchSeed:()J
+    #51 = Utf8               cachedSeed
+   #134 = Utf8               fetchSeed
+   #142 = NameAndType        #51:#52      // cachedSeed:Ljava/lang/Long;
+   #143 = Fieldref           #2.#142      // obzcu/re/virtualmachine/ObzcureVM.cachedSeed:Ljava/lang/Long;
+   #149 = Utf8               obzcure.server
+   #150 = String             #149         // obzcure.server
+   #151 = Utf8               https://localhost:8443
+   #152 = String             #151         // https://localhost:8443
+   #165 = Utf8               Release requires an https license server; refusing cleartext.
+   #166 = String             #165         // Release requires an https license server; refusing cleartext.
+   #167 = Utf8               javax.net.ssl.trustStore
+   #168 = String             #167         // javax.net.ssl.trustStore
+   #172 = Utf8               Release requires a pinned trust store (-Djavax.net.ssl.trustStore); refusing default CA trust.
+   #173 = String             #172         // Release requires a pinned trust store (-Djavax.net.ssl.trustStore); refusing default CA trust.
+   #174 = Utf8               obzcure.license
+   #175 = String             #174         // obzcure.license
+   #176 = Utf8               No license provided: set -Dobzcure.license=... (the license server delivers the seed).
+   #177 = String             #176         // No license provided: set -Dobzcure.license=... (the license server delivers the seed).
+   #203 = Utf8               \u0001/seed?license=\u0001&fingerprint=\u0001
+   #204 = String             #203         // \u0001/seed?license=\u0001&fingerprint=\u0001
+   #247 = Utf8               License server refused the license (HTTP \u0001): \u0001
+   #248 = String             #247         // License server refused the license (HTTP \u0001): \u0001
+   #268 = Utf8               Could not reach the license server at \u0001: \u0001
+   #269 = String             #268         // Could not reach the license server at \u0001: \u0001
+   #282 = Utf8               seed
+   #288 = Utf8               license
+   #746 = NameAndType        #134:#135    // fetchSeed:()J
+   #747 = Methodref          #2.#746      // obzcu/re/virtualmachine/ObzcureVM.fetchSeed:()J
+  private static long fetchSeed();
+  private static volatile java.lang.Long cachedSeed;
+-- obzcu.re.virtualmachine.VMLoader
+            0      82     0  seed   J
+            0    1832     2  seed   J
+  #282 = Utf8               seed
+-- DiffTest
+         4: ldc           #26                 // String license-demo.jar
+        14: ldc           #31                 // String license-demo-vm.jar
+        74: ldc           #56                 // String LicenseDemo
+        76: ldc           #58                 // String checkLicense
+        85: ldc           #56                 // String LicenseDemo
+        87: ldc           #58                 // String checkLicense
+       248: ldc           #121                // String PASS: virtualized checkLicense matches the original on every input.
+   #25 = Utf8               license-demo.jar
+   #26 = String             #25           // license-demo.jar
+   #30 = Utf8               license-demo-vm.jar
+   #31 = String             #30           // license-demo-vm.jar
+   #55 = Utf8               LicenseDemo
+   #56 = String             #55           // LicenseDemo
+   #57 = Utf8               checkLicense
+   #58 = String             #57           // checkLicense
+  #120 = Utf8               PASS: virtualized checkLicense matches the original on every input.
+  #121 = String             #120          // PASS: virtualized checkLicense matches the original on every input.
+== $ ls -la (final)
+total 177
+drwxr-xr-x 1 user 197121     0 Sep  9 21:28 .
+drwxr-xr-x 1 user 197121     0 Sep  9 21:22 ..
+-rw-r--r-- 1 user 197121  2651 Sep  9 21:27 BruteForce.class
+-rw-r--r-- 1 user 197121  1310 Sep  9 21:27 BruteForce.java
+-rw-r--r-- 1 user 197121 77116 Sep  9 21:28 EVIDENCE.log
+-rw-r--r-- 1 user 197121  3496 Sep  9 21:22 Feature.class
+-rw-r--r-- 1 user 197121  1814 Sep  9 21:22 PremiumApp.class
+-rw-r--r-- 1 user 197121  4045 Sep  9 21:28 REPORT.md
+-rw-r--r-- 1 user 197121    57 Sep  9 21:22 feature.enc
+drwxr-xr-x 1 user 197121     0 Sep  9 21:24 jar_x
+-rw-r--r-- 1 user 197121 68552 Sep  9 21:22 license-demo-vm.jar

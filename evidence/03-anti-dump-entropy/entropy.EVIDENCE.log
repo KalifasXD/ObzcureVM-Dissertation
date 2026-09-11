@@ -1,0 +1,18 @@
+############################################################
+# Blob entropy (F8/V3) - Thu Sep  3 18:42:01 GTBDT 2026  (N=20 builds)
+java version "18" 2022-03-22
+############################################################
+
+### 1. Compile EntropyExp (against the tool jar, for BlobCrypto)
+
+### 2. Build 20 variants; extract each cats.meow + seed
+    collected 20 (cats.meow, seed) pairs
+
+### 3. Entropy + chi-square (plaintext vs encrypted)
+=========================================================================
+Blob entropy / uniformity (F8 / V3) - corpus of 20 per-build blobs
+=========================================================================
+PLAINTEXT VM program (C1)        bytes=12220   distinct=179/256  entropy=4.2796 bits/byte  chi2= 321176.6 (df=255, crit@0.05=293.2 -> NON-uniform (structured))
+ENCRYPTED blob (anti-dump, C3)   bytes=12780   distinct=256/256  entropy=7.9839 bits/byte  chi2=    282.0 (df=255, crit@0.05=293.2 -> consistent with UNIFORM)
+=========================================================================
+### done (blob entropy)

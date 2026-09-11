@@ -1,49 +1,66 @@
-# Obzcure Virtual Machine
-## Java virtual machine made in Java
+# JVM Software Protection via Bytecode Virtualization (MSc dissertation)
 
-# THIS IS NOT PRODUCTION SAFE - WORK IN PROGRESS!  
-- *Use at your own risk.*
-- Requires Java 17 (with preview features)
+This repository contains the implementation and the experimental evidence for my MSc dissertation,
+*"Development and Evaluation of a JVM-Level Software Protection System via Bytecode Virtualization"*
+(University of Piraeus, MSc in Cybersecurity and Data Science).
 
-`java --enable-preview  -jar ObzcureVM.jar`  
-`"path/to/java17" --enable-preview  -jar ObzcureVM.jar -i in.jar -o out.jar -fp -rf -rm -sd`  
-`"C:\Program Files\Java\graalvm-ce-java17-21.3.0\bin\java.exe" --enable-preview  -jar ObzcureVM.jar -i in.jar -o out.jar -fp -rf -rm -sd`
+It is **based on the original ObzcureVM project** by HoverCatz:
+**https://github.com/HoverCatz/ObzcureVirtualMachine**. ObzcureVM provides the base bytecode virtualizer
+(a stack-machine interpreter that lifts a method body into a custom instruction set stored as a resource).
+The dissertation takes that project as its starting point and evolves it into a source-agnostic software
+protection system, then attacks and hardens it under a defined threat model. The original project's README
+is preserved here as [`README-ObzcureVM-upstream.md`](README-ObzcureVM-upstream.md), and the base is
+licensed under GPL-3.0 (see [`LICENSE.md`](LICENSE.md)); this repository keeps that license.
 
-The virtualized output jar also now requires Java 17 (with preview features)
+## What the dissertation adds
+
+On top of the base virtualizer:
+
+- **Per-build opcode diversification** - a secret, per-build Fisher-Yates permutation of the VM opcode
+  encoding, so a devirtualizer built against one build does not work against the next (a Kerckhoffs
+  framing: the interpreter is public, only the per-build seed is secret).
+- **A protection envelope** around the VM: anti-debug, anti-dump (AES-256-GCM encrypt-at-rest of the VM
+  program), result-binding (the licensed computation yields a value the application needs, so there is no
+  boolean gate to patch), and an **off-machine license server** that delivers the per-build seed over TLS
+  only after a valid license, bound to the machine (hardware node-lock).
+- **Source-agnostic injection** demonstrated on a real application (JabRef 4.3.1 headless and JabRef 5.7
+  with a live GUI).
+- **An attack-and-harden evaluation** under a Level-2 threat model (decompiler, debugger, instrumentation
+  agent, hex/bytecode patcher), including an independent AI-assisted red-teaming attack.
+
+The contribution is the open, hardened, attack-evaluated and reproducible realisation and its evaluation,
+not the virtualization technique itself (which is prior art).
+
+## Repository layout
 
 ```
-Usage:
- -fp,--forcePublic      Make every field and method public (accessible
-                        from everywhere)
- -i,--input <input>     Input jar file
- -o,--output <output>   Output jar file
- -rf,--removeFinal      Force virtualization of final fields (removes
-                        final access)
- -rm,--rndMeow          Random cats.meow filename
- -sd,--skipDebug        Remove debugging information from all classes
+src/                 the evolved virtualizer (diversification in vm/translator + virtualmachine/VMLoader;
+                     envelope in virtualmachine/{BlobCrypto, ObzcureVM})
+license-server/      Spring Boot off-machine seed server (TLS, node-lock, vendor token; secrets externalized)
+demo/                one folder per experiment/attack (drivers + sources; transient build outputs gitignored)
+evidence/            the experimental evidence: EVIDENCE.log files, statistics, attack transcripts,
+                     screenshots, and a screenshot-to-artifact index (evidence/README.md)
+README-DISSERTATION.md      detailed build + reproduction guide (prerequisites, keytool, driver table)
+README-ObzcureVM-upstream.md  the original ObzcureVM README, preserved for attribution
 ```
 
-### Before
-![image](https://github.com/HoverCatz/ObzcureVirtualMachine/assets/1442391/af5419d7-a4fb-48c0-9c64-70c35c1c8e2a)
+## Quick start
 
-### After
-![image](https://github.com/HoverCatz/ObzcureVirtualMachine/assets/1442391/137620a2-ca72-4a99-b253-896134f57d77)
+```bash
+# build the virtualizer (reference: Docker + JDK 17; host Maven + JDK 17/18 also works)
+mvn clean package -DskipTests
 
-## Example timings:
-Virtualized output file:
-- 5458 ms
-- 5011 ms
-- 4947 ms
-- 4873 ms
-- 4937 ms
+# build the license server
+cd license-server && mvn -q clean package -DskipTests && cd ..
 
-Original input file:
-- 53 ms
-- 18 ms
-- 21 ms
-- 12 ms
-- 9 ms
+# reproduce an experiment (each driver tees an EVIDENCE.log)
+bash demo/diversification/run_diversification.sh     # RQ1: quantitative diversification effectiveness
+```
 
-*As you can see from these 5 test runs, the virtualized version of a jar is up to 606 times slower than the original jar.  
-This is a worst case scenario, where a huge jar was fully virtualized including lots of nested loops.  
-If you only virtualize a few specific methods, it shouldn't be much slower than the original.*
+The full prerequisites, the TLS-material regeneration (`keytool`), and a driver-by-driver table are in
+[`README-DISSERTATION.md`](README-DISSERTATION.md). The evidence behind every figure and screenshot in the
+thesis, mapped screenshot-by-screenshot to its artifact, is in [`evidence/`](evidence/).
+
+> Status: research prototype / proof-of-concept, not production-safe. TLS uses a self-signed certificate
+> and a `changeit` keystore, and the hardware fingerprint is client-computed - all documented as PoC
+> boundaries in the thesis and the evidence.

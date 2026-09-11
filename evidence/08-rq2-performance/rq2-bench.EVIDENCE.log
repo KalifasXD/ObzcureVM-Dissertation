@@ -1,0 +1,41 @@
+############################################################
+# RQ2 microbenchmark - Thu Sep  3 18:03:19 GTBDT 2026
+java version "18" 2022-03-22
+# forks=8  original[warm=1000000 batch=5000000 x15]  virtual[warm=30 batch=1 x60]
+############################################################
+
+### 1. Compile harness + virtualize a fresh license-demo (known seed)
+    original=license-demo.jar  virtualized=demo/rq2-bench/license-demo-vm-bench.jar  per-build seed=4481777876305915604
+
+### 2. Start license server + register the seed
+registered license=BENCH-001 [register HTTP 200]
+
+### 3. Run 8 forks per target (SAMPLE lines = per-call ns)
+-- fork 1/8 (original + virtualized)
+-- fork 2/8 (original + virtualized)
+-- fork 3/8 (original + virtualized)
+-- fork 4/8 (original + virtualized)
+-- fork 5/8 (original + virtualized)
+-- fork 6/8 (original + virtualized)
+-- fork 7/8 (original + virtualized)
+-- fork 8/8 (original + virtualized)
+
+### 4. Aggregate (from demo/rq2-bench/samples.txt, deterministic)
+==============================================================================
+RQ2 / EE2 - per-call execution time of checkLicense (nanoseconds)
+==============================================================================
+target             n         mean          min          p50          p90          p99
+original         120         4.42         3.69         3.87         4.88        13.95
+virtualized      480  32219451.04  28583200.00  31668950.00  35638620.00  44253843.00
+------------------------------------------------------------------------------
+slowdown (median virtualized / median original): 8191636.9x
+slowdown (mean   virtualized / mean   original): 7283467.4x
+absolute added cost per call (median): 31668946.1 ns  (31668.95 us)
+==============================================================================
+
+### 5. Per-call cost breakdown (§8.5 axis 2: where the ~31 ms goes)
+BREAKDOWN BlobCrypto.fingerprint()     33828708.0 ns  (33828.708 us)
+BREAKDOWN InetAddress getHostName()         260.0 ns  (    0.260 us)
+BREAKDOWN AES-256-GCM decrypt(640B)      119320.0 ns  (  119.320 us)
+SINK 0
+### done (RQ2)

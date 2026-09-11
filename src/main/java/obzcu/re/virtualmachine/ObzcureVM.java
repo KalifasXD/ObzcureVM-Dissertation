@@ -33,6 +33,105 @@ public final class ObzcureVM
     private int pointer = 0, lineNumber = 0;
     private String className = null, methodName = null, methodDesc =  null;
 
+    // PoC stub for OFF-MACHINE seed delivery. The diversification seed is NOT shipped in the
+    // artifact; it is supplied at runtime from outside. Here that "outside" is a system property
+    // (-Dobzcure.seed=...). In Phase B this is replaced by the license server's response, returned
+    // only after license + hardware-fingerprint authentication. A dumped blob alone cannot decode.
+    // Anti-debug (envelope layer): refuse to reveal the seed if a debugger or instrumentation
+    // agent is present. This guards the single moment the off-machine secret is exposed, which is
+    // exactly how a dynamic attacker (jdb/JDWP or -javaagent, both Level 2) would try to grab it.
+    // Detection here is via the JVM's own launch arguments (portable, no native code needed).
+    private static void antiDebugCheck()
+    {
+        // Anti-debug: catch a debugger/agent injected at JVM startup. getInputArguments() reflects
+        // BOTH command-line flags AND options injected via JAVA_TOOL_OPTIONS / _JAVA_OPTIONS env
+        // vars (empirically verified), so this covers command-line and environment-variable injection.
+        //
+        // KNOWN LIMITATION (empirically established, see ArgProbe): this does NOT catch a debugger
+        // ATTACHED AFTER LAUNCH via the Attach API. A naive runtime thread-scan does not help either,
+        // because JDWP's transport threads are VM-internal and are NOT visible to
+        // Thread.getAllStackTraces(). Reliable runtime detection of a dynamically-attached debugger
+        // requires native / JVMTI code -> future work (PhD native anti-debug).
+        for (String arg : java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments())
+        {
+            String a = arg.toLowerCase();
+            if (a.contains("jdwp") || a.contains("-xdebug") || a.contains("-agentlib")
+                    || a.contains("-agentpath") || a.contains("-javaagent"))
+                throw new IllegalStateException("Debugger or instrumentation agent detected; refusing to run.");
+        }
+    }
+
+    private static volatile Long cachedSeed = null;
+
+    private static long fetchSeed()
+    {
+        antiDebugCheck();
+
+        // Test/override path (DEV_MODE builds only): an explicit seed still works (DiffTest harness +
+        // ObzcureVM's own tests). Stripped from release builds (F2): with DEV_MODE=false javac elides
+        // this branch, so there is no compiled-in -Dobzcure.seed bypass of the server + fingerprint + TLS.
+        if (BlobCrypto.DEV_MODE) {
+            String override = System.getProperty("obzcure.seed");
+            if (override != null)
+                return Long.parseLong(override);
+        }
+
+        // Off-machine path: fetch the seed from the license server ONCE, then reuse it (the seed is
+        // constant per build). Server-first: an invalid/absent license -> no seed -> no decode -> lock.
+        Long c = cachedSeed;
+        if (c != null)
+            return c;
+
+        // F6: release enforces TLS. Dev defaults to cleartext localhost for the offline demos; a release
+        // build (DEV_MODE=false) defaults to https, REFUSES a non-https server, and REFUSES to fall back to
+        // the JVM's default (public-CA) trust store - it must validate against an explicit pinned trust
+        // store (the client-truststore.p12 holding only the license server's cert). Compile-time gated.
+        String server = System.getProperty("obzcure.server",
+                BlobCrypto.DEV_MODE ? "http://localhost:8080" : "https://localhost:8443");
+        if (!BlobCrypto.DEV_MODE) {
+            if (!server.toLowerCase().startsWith("https://"))
+                throw new IllegalStateException("Release requires an https license server; refusing cleartext.");
+            if (System.getProperty("javax.net.ssl.trustStore") == null)
+                throw new IllegalStateException("Release requires a pinned trust store (-Djavax.net.ssl.trustStore); refusing default CA trust.");
+        }
+        String license = System.getProperty("obzcure.license");
+        if (license == null)
+            throw new IllegalStateException(
+                "No license provided: set -Dobzcure.license=... (the license server delivers the seed).");
+        try
+        {
+            java.net.http.HttpClient http = java.net.http.HttpClient.newHttpClient();
+            java.net.http.HttpRequest req = java.net.http.HttpRequest.newBuilder()
+                .uri(java.net.URI.create(server + "/seed?license="
+                        + java.net.URLEncoder.encode(license, java.nio.charset.StandardCharsets.UTF_8)
+                        + "&fingerprint="
+                        + java.net.URLEncoder.encode(fingerprint(), java.nio.charset.StandardCharsets.UTF_8)))
+                .GET().build();
+            java.net.http.HttpResponse<String> resp =
+                http.send(req, java.net.http.HttpResponse.BodyHandlers.ofString());
+            if (resp.statusCode() != 200)
+                throw new IllegalStateException(
+                    "License server refused the license (HTTP " + resp.statusCode() + "): " + resp.body());
+            long seed = Long.parseLong(resp.body().trim());
+            cachedSeed = seed;
+            return seed;
+        }
+        catch (java.io.IOException | InterruptedException e)
+        {
+            throw new IllegalStateException(
+                "Could not reach the license server at " + server + ": " + e.getMessage(), e);
+        }
+    }
+
+    // Hardware fingerprint = the machine identity a license binds to (node-locking). Single source of
+    // truth is BlobCrypto.fingerprint(), which ALSO derives the blob decode key (F2), so the machine
+    // bound at the server is exactly the machine whose fingerprint must reproduce the key. The
+    // -Dobzcure.fingerprint override and the hardware computation now live there (override DEV_MODE-only).
+    private static String fingerprint()
+    {
+        return BlobCrypto.fingerprint();
+    }
+
     public ObzcureVM(int index, int maxLocals, int maxStack)
     {
         this(index, maxLocals, maxStack, null, null);
@@ -50,9 +149,11 @@ public final class ObzcureVM
         this.tryCatch = tryCatch;
         this.lookup = lookup;
         try {
-            this.instructions = VMLoader.load(this, new DataInputStream(new ByteArrayInputStream(meowData.get(index))));
+            long seed = fetchSeed();
+            byte[] plain = BlobCrypto.decrypt(meowData.get(index), seed); // anti-dump: decrypt the blob at rest
+            this.instructions = VMLoader.load(this, new DataInputStream(new ByteArrayInputStream(plain)), seed);
         } catch (Throwable e) {
-            e.printStackTrace();
+            if (BlobCrypto.DEV_MODE) e.printStackTrace(); // F7: no failure-mode oracle in release builds
             throw new RuntimeException("Failed loading .meow data.");
         }
     }
@@ -65,9 +166,11 @@ public final class ObzcureVM
         this.tryCatch = tryCatch;
         this.lookup = lookup;
         try {
-            this.instructions = VMLoader.load(this, new DataInputStream(new ByteArrayInputStream(result)));
+            long seed = fetchSeed();
+            byte[] plain = BlobCrypto.decrypt(result, seed); // anti-dump: Translator output is always encrypted
+            this.instructions = VMLoader.load(this, new DataInputStream(new ByteArrayInputStream(plain)), seed);
         } catch (Throwable e) {
-            e.printStackTrace();
+            if (BlobCrypto.DEV_MODE) e.printStackTrace(); // F7: no failure-mode oracle in release builds
             throw new RuntimeException("Failed loading .meow data.");
         }
     }
@@ -120,7 +223,7 @@ public final class ObzcureVM
             }
             catch (IOException e)
             {
-                e.printStackTrace();
+                if (BlobCrypto.DEV_MODE) e.printStackTrace(); // F7: no failure-mode oracle in release builds
                 throw new RuntimeException("Failed loading .meow data.");
             }
     }
@@ -538,22 +641,19 @@ public final class ObzcureVM
 
     private Object deepClone(Object original)
     {
-        return switch (original)
-        {
-            case String str -> str;
-            case Integer k -> k;
-            case Long l -> l;
-            case Float f -> f;
-            case Double d -> d;
-            case Short s -> s;
-            case Byte b -> b;
-            case Boolean z -> z;
-            case VMType type -> new VMType(type.returnType, type.argumentTypes);
-            case VMHandle handle -> new VMHandle(handle.tag, handle.owner, handle.name, handle.returnType, handle.argumentTypes);
-            case Object[] objArray -> deepClone(null, objArray);
-            case int[] a -> a.clone();
-            default -> throw new IllegalStateException("Unexpected value: " + original);
-        };
+        if(original instanceof String str) return str;
+        else if(original instanceof Integer k) return k;
+        else if(original instanceof Long l) return l;
+        else if(original instanceof Float f) return f;
+        else if(original instanceof Double d) return d;
+        else if(original instanceof Short s) return s;
+        else if(original instanceof Byte b) return b;
+        else if(original instanceof Boolean z) return z;
+        else if(original instanceof VMType type) return new VMType(type.returnType, type.argumentTypes);
+        else if(original instanceof VMHandle handle) return new VMHandle(handle.tag, handle.owner, handle.name, handle.returnType, handle.argumentTypes);
+        else if(original instanceof Object[] objArray) return deepClone(null, objArray);
+        else if(original instanceof int[] a) return a.clone();
+        else throw new IllegalStateException("Unexpected value: " + original);
     }
 
     public Object cast(Object pop, Class<?> argumentClass)

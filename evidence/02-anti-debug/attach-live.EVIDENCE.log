@@ -1,0 +1,55 @@
+### 0) compile target + attackers + agent (JDK 18) ###
+    compiled OK
+
+########## LIVE DYNAMIC-ATTACH DEMO v2 (native Windows, JDK 18) ##########
+java version "18.0.2.1" 2022-08-18
+
+### 1) launch target CLEAN (no debug/agent flags in its launch line) ###
+captured TARGET_PID=9264
+--- PRE-ATTACK target output (v1 clean, v2 clean, gate ALLOWED): ---
+TARGET_PID=9264
+Launch args (everything v1 can ever see): [--add-modules=jdk.attach]
+[iter 0]  v1=clean  v2=clean   -> ALLOWED (seed released, protected method runs)
+[iter 1]  v1=clean  v2=clean   -> ALLOWED (seed released, protected method runs)
+[iter 2]  v1=clean  v2=clean   -> ALLOWED (seed released, protected method runs)
+[iter 3]  v1=clean  v2=clean   -> ALLOWED (seed released, protected method runs)
+
+### 2) attacker try A: attach the JDWP DEBUGGER post-launch (jdwp.dll) ###
+    (jdwp.dll exports only Agent_OnLoad/OnUnload -> no Agent_OnAttach -> late-attach impossible)
+    jdwp> Exception in thread "main" com.sun.tools.attach.AgentLoadException: Failed to load agent library: _Agent_OnAttach@12 is not available in jdwp
+    jdwp> 	at jdk.attach/sun.tools.attach.VirtualMachineImpl.execute(VirtualMachineImpl.java:124)
+    jdwp> 	at jdk.attach/sun.tools.attach.HotSpotVirtualMachine.loadAgentLibrary(HotSpotVirtualMachine.java:98)
+    jdwp> 	at jdk.attach/sun.tools.attach.HotSpotVirtualMachine.loadAgentLibrary(HotSpotVirtualMachine.java:123)
+    jdwp> 	at AttachTool.main(AttachTool.java:9)
+    => the pure-JDWP debugger CANNOT be dynamically attached; v1 already blocks it at launch.
+
+### 3) attacker try B: attach a JAVA INSTRUMENTATION AGENT post-launch (instrument.dll) ###
+    (instrument.dll exports Agent_OnAttach -> this is the REAL residual dynamic-attach vector)
+    agent> [attacker] instrumentation agent loaded into PID 9264 post-launch (no -javaagent launch flag => invisible to v1)
+    attacker_exit=0
+
+### 4) target output ACROSS the instrumentation attach ###
+    (watch: the INJECTED AGENT banner appears INSIDE the target, yet v1 & v2 stay clean, gate stays ALLOWED)
+TARGET_PID=9264
+Launch args (everything v1 can ever see): [--add-modules=jdk.attach]
+[iter 0]  v1=clean  v2=clean   -> ALLOWED (seed released, protected method runs)
+[iter 1]  v1=clean  v2=clean   -> ALLOWED (seed released, protected method runs)
+[iter 2]  v1=clean  v2=clean   -> ALLOWED (seed released, protected method runs)
+[iter 3]  v1=clean  v2=clean   -> ALLOWED (seed released, protected method runs)
+[iter 4]  v1=clean  v2=clean   -> ALLOWED (seed released, protected method runs)
+
+>>> [INJECTED AGENT] now running INSIDE target PID 9264  (attached POST-LAUNCH via Attach API) <<<
+>>> [INJECTED AGENT] Instrumentation granted: canRedefine=true  canRetransform=true
+>>> [INJECTED AGENT] can see 967 loaded classes (incl. the protected app's own) = full devirtualization foothold
+[iter 5]  v1=clean  v2=clean   -> ALLOWED (seed released, protected method runs)
+[iter 6]  v1=clean  v2=clean   -> ALLOWED (seed released, protected method runs)
+[iter 7]  v1=clean  v2=clean   -> ALLOWED (seed released, protected method runs)
+[iter 8]  v1=clean  v2=clean   -> ALLOWED (seed released, protected method runs)
+
+### 5) would-be v2 verdict summary (pure-Java runtime detection) ###
+    v2 (thread-scan) saw NOTHING across the whole run -> pure-Java runtime detection is BLIND.
+    => closing this gap needs native / JVMTI code (PhD future work).
+
+### stop target ###
+SUCCESS: The process with PID 9264 has been terminated.
+########## DONE ##########

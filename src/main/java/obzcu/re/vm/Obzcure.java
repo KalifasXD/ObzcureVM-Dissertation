@@ -34,6 +34,10 @@ public class Obzcure
     // ObzcureVM filename
     public String catsMeowFilename = "/obzcure/cats.meow";
 
+    // One diversification seed for the whole build, shared by every virtualized
+    // method. Generated once when this Obzcure instance is created (i.e. per build).
+    public final long buildSeed = new java.security.SecureRandom().nextLong();
+
     public Obzcure(String[] args)
     {
         try
@@ -127,6 +131,10 @@ public class Obzcure
 
             System.out.println();
             System.out.println("Welcome to Obzcure.");
+            System.out.println();
+            // The diversification seed is delivered off-machine: it is NOT written into the output
+            // jar. Register this value with the license server so it can hand it back at runtime.
+            System.out.println("OBZCURE_SEED=" + buildSeed);
             System.out.println();
 
             JarFile jar = new JarFile(inputFile);
@@ -257,6 +265,38 @@ public class Obzcure
                     {
                         t.printStackTrace();
                     }
+                }
+            }
+
+            // Auto-register the per-build seed with the license server (opt-in: -Dobzcure.register.license).
+            // The build hands its fresh seed to the server so no manual POST /register is needed.
+            String regLicense = System.getProperty("obzcure.register.license");
+            if (regLicense != null)
+            {
+                // F6: release auto-registers over https only (dev keeps cleartext localhost for the demos).
+                String regServer = System.getProperty("obzcure.register.server",
+                        obzcu.re.virtualmachine.BlobCrypto.DEV_MODE ? "http://localhost:8080" : "https://localhost:8443");
+                // F5: present the vendor secret so an unauthenticated attacker cannot (re)register a license
+                // and hijack/reset its node-lock binding. The server rejects a missing/wrong token with 403.
+                String regToken = System.getProperty("obzcure.register.secret", "");
+                try
+                {
+                    if (!obzcu.re.virtualmachine.BlobCrypto.DEV_MODE && !regServer.toLowerCase().startsWith("https://"))
+                        throw new IllegalStateException("release build refuses to auto-register over cleartext http");
+                    java.net.http.HttpResponse<String> resp = java.net.http.HttpClient.newHttpClient().send(
+                        java.net.http.HttpRequest.newBuilder()
+                            .uri(java.net.URI.create(regServer + "/register?license="
+                                + java.net.URLEncoder.encode(regLicense, java.nio.charset.StandardCharsets.UTF_8)
+                                + "&seed=" + buildSeed
+                                + "&token=" + java.net.URLEncoder.encode(regToken, java.nio.charset.StandardCharsets.UTF_8)))
+                            .POST(java.net.http.HttpRequest.BodyPublishers.noBody()).build(),
+                        java.net.http.HttpResponse.BodyHandlers.ofString());
+                    System.out.println("Auto-registered seed for license '" + regLicense + "' with "
+                        + regServer + ": HTTP " + resp.statusCode() + " " + resp.body());
+                }
+                catch (Exception e)
+                {
+                    System.out.println("WARNING: auto-register failed (" + regServer + "): " + e.getMessage());
                 }
             }
 
