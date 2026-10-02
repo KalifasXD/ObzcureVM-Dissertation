@@ -48,34 +48,113 @@ public class TranslateInvokeDynamics
 
     public boolean translate(InvokeDynamicInsnNode idin) throws Throwable
     {
-        // Temporarily filter
-        boolean unsupported = false;
-        if (unsupported)
+        // Generic path for EVERY invokedynamic. Earlier versions of this class only
+        // handled a hand-coded whitelist of functional interfaces (Runnable,
+        // Consumer/IntConsumer/LongConsumer/DoubleConsumer, Function, Predicate,
+        // Supplier) plus java.lang.String concatenation, and aborted the build for
+        // anything else. injectGeneric serialises the call site faithfully and the
+        // runtime replays the real bootstrap method, so arbitrary functional
+        // interfaces, method references and custom bootstraps all virtualize. This
+        // both widens coverage to "any invokedynamic" and is strictly more correct
+        // than the old per-interface reconstruction (which mishandled some captured
+        // argument shapes at runtime). The old whitelist handlers below are retained
+        // only so the runtime can still read blobs produced by older builds.
+        return injectGeneric(idin);
+    }
+
+    /**
+     * Generic invokedynamic handler.
+     *
+     * Instead of hand-coding one branch per functional interface, this serialises
+     * everything the JVM itself needs to link an invokedynamic call site:
+     *   - the call-site name and descriptor (MethodType),
+     *   - the bootstrap method handle,
+     *   - the bootstrap's static arguments.
+     * At runtime the VM reconstructs these and invokes the bootstrap to obtain a
+     * real {@link java.lang.invoke.CallSite}, then calls its dynamic invoker. This
+     * covers any standard bootstrap (LambdaMetafactory, StringConcatFactory, and
+     * others) without an interface whitelist. Exotic constants such as
+     * {@code ConstantDynamic} are not serialisable this way and make the method
+     * return {@code false} (reported as an unsupported instruction), which keeps
+     * them an explicit residual rather than silently miscompiling.
+     */
+    private boolean injectGeneric(InvokeDynamicInsnNode idin) throws Throwable
+    {
+        int opcode = idin.getOpcode();
+        Handle bsm = idin.bsm;
+        if (bsm == null)
             return false;
 
-        Type returnType = Type.getReturnType(idin.desc);
-        switch (returnType.getInternalName())
+        Object[] bsmArgs = idin.bsmArgs;
+
+        if (debug)
         {
-            case "java/lang/Runnable": return inject(idin, "Runnable");
-
-            // Consumers
-            case "java/util/function/Consumer": return inject(idin, "Consumer");
-            case "java/util/function/IntConsumer": return inject(idin, "IntConsumer");
-            case "java/util/function/LongConsumer": return inject(idin, "LongConsumer");
-            case "java/util/function/DoubleConsumer": return inject(idin, "DoubleConsumer");
-
-            // Others
-            case "java/util/function/Function": return inject(idin, "Function");
-            case "java/util/function/Predicate": return inject(idin, "Predicate");
-            case "java/util/function/Supplier": return inject(idin, "Supplier");
-            // TODO: Implement support for every single class inside the package `java.util.function`
-
-            case "java/lang/String": return injectStringConcat(idin);
-            default: {
-                System.out.println("Unsupported returnType: " + returnType.getInternalName());
-                return false;
-            }
+            System.out.println("Generic invokedynamic: " + idin.name + idin.desc);
+            System.out.println("  bsm: " + bsm);
+            System.out.println("  bsmArgs: " + Arrays.toString(bsmArgs));
         }
+
+        if (debug) System.out.println("VMInvokeDynamicInsnNode: " + opcode);
+        writer.writeUTF("VMInvokeDynamicInsnNode");
+        writer.writeInt(opcode);
+
+        writer.writeUTF("Generic");     // which
+        writer.writeUTF(idin.name);     // call-site name (functional-interface method name)
+        writer.writeUTF(idin.desc);     // call-site descriptor (captured args -> interface type)
+
+        // Bootstrap method handle
+        writeHandleFields(bsm);
+
+        // Bootstrap static arguments
+        writer.writeInt(bsmArgs.length);
+        for (Object arg : bsmArgs)
+            if (!writeConst(arg))
+                return false;
+
+        return true;
+    }
+
+    /** Serialise an ASM {@link Handle} (tag, owner, name, desc, isInterface). */
+    private void writeHandleFields(Handle h) throws Throwable
+    {
+        writer.writeInt(h.getTag());
+        writer.writeUTF(h.getOwner());
+        writer.writeUTF(h.getName());
+        writer.writeUTF(h.getDesc());
+        writer.writeBoolean(h.isInterface());
+    }
+
+    /**
+     * Serialise a single bootstrap static argument. The constant-pool types that
+     * can appear here are int/long/float/double, String, a class or method
+     * {@link Type}, or a {@link Handle}. Anything else (e.g. ConstantDynamic)
+     * returns false so the caller reports an unsupported instruction.
+     */
+    private boolean writeConst(Object arg) throws Throwable
+    {
+        if (arg instanceof Integer)      { writer.writeUTF("I"); writer.writeInt((Integer) arg); }
+        else if (arg instanceof Long)    { writer.writeUTF("J"); writer.writeLong((Long) arg); }
+        else if (arg instanceof Float)   { writer.writeUTF("F"); writer.writeFloat((Float) arg); }
+        else if (arg instanceof Double)  { writer.writeUTF("D"); writer.writeDouble((Double) arg); }
+        else if (arg instanceof String)  { writer.writeUTF("S"); writer.writeUTF((String) arg); }
+        else if (arg instanceof Type)
+        {
+            Type t = (Type) arg;
+            if (t.getSort() == Type.METHOD) { writer.writeUTF("M"); writer.writeUTF(t.getDescriptor()); }
+            else                            { writer.writeUTF("C"); writer.writeUTF(t.getDescriptor()); }
+        }
+        else if (arg instanceof Handle)
+        {
+            writer.writeUTF("H");
+            writeHandleFields((Handle) arg);
+        }
+        else
+        {
+            System.out.println("Unsupported bootstrap static argument type: " +
+                    (arg == null ? "null" : arg.getClass().getName()));
+            return false;
+        }
+        return true;
     }
 
     private boolean injectStringConcat(InvokeDynamicInsnNode idin) throws Throwable

@@ -1,0 +1,7 @@
+# Build output produced by the demo scripts (regenerated on each run)
+bS/
+bU/
+gen-build/
+*.jar
+*.class
+*.log

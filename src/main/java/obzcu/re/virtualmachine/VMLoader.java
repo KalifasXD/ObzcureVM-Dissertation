@@ -253,7 +253,52 @@ public class VMLoader
                 inputs.add(arguments);
                 return true;
             }
+            case "Generic": {
+                inputs.add(which);
+                inputs.add(dis.readUTF());     // call-site name
+                inputs.add(dis.readUTF());     // call-site descriptor
+                inputs.add(dis.readInt());     // bsm tag
+                inputs.add(dis.readUTF());     // bsm owner
+                inputs.add(dis.readUTF());     // bsm name
+                inputs.add(dis.readUTF());     // bsm desc
+                inputs.add(dis.readBoolean()); // bsm isInterface
+                int argsLength = dis.readInt();
+                Object[] consts = new Object[argsLength];
+                for (int i = 0; i < argsLength; i++)
+                    consts[i] = readConst(dis);
+                inputs.add(consts);
+                return true;
+            }
             default: return false;
+        }
+    }
+
+    /**
+     * Read one generic bootstrap static argument, mirroring
+     * TranslateInvokeDynamics.writeConst. Each constant is returned as a small
+     * tagged Object[] that VMInvokeDynamicInsnNode turns into a live value.
+     */
+    private static Object[] readConst(DataInputStream dis) throws Throwable
+    {
+        String t = dis.readUTF();
+        switch (t)
+        {
+            case "I": return new Object[]{ t, dis.readInt() };
+            case "J": return new Object[]{ t, dis.readLong() };
+            case "F": return new Object[]{ t, dis.readFloat() };
+            case "D": return new Object[]{ t, dis.readDouble() };
+            case "S": return new Object[]{ t, dis.readUTF() };
+            case "M": return new Object[]{ t, dis.readUTF() };
+            case "C": return new Object[]{ t, dis.readUTF() };
+            case "H": {
+                int tag = dis.readInt();
+                String owner = dis.readUTF();
+                String name = dis.readUTF();
+                String desc = dis.readUTF();
+                boolean itf = dis.readBoolean();
+                return new Object[]{ t, tag, owner, name, desc, itf };
+            }
+            default: throw new IllegalStateException("Unknown bootstrap const tag: " + t);
         }
     }
 
