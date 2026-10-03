@@ -28,7 +28,7 @@ B="$D/gen-build"
 rm -rf "$B"; mkdir -p "$B/plain"
 
 echo "############################################################"
-echo "# Generic invokedynamic virtualization - $(date)"
+echo "# Generic invokedynamic virtualization"
 java -version 2>&1 | head -1
 echo "# virtualizer: $(basename "$JAR")"
 echo "############################################################"

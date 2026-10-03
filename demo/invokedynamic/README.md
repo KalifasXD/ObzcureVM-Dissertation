@@ -26,9 +26,10 @@ Translator.java:
             + className + " " + methodName + methodDesc);
 ```
 
-`SupportedIndy.java` (a `Supplier` lambda) and `UnsupportedIndy.java` (a
-`Comparator` lambda) illustrate the two sides of that boundary. `run_invokedynamic.sh`
-is the capture of that behaviour against the pre-generalization build.
+Running `run_generic_indy.sh` (below) against a **pre-generalization** build
+reproduces this boundary: the `Comparator`, `BiFunction`, custom-interface and
+method-reference methods in `GenericIndy.java` abort virtualization, and the script
+reports that the jar lacks generic support.
 
 ## Generic support (bootstrap replay)
 
